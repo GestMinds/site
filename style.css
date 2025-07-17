@@ -313,3 +313,133 @@ body {
   border-radius: 999px;
   background: linear-gradient(to right, #f97316, #ec4899, #3b82f6);
 }
+
+.beneficios-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  border-top: 1px solid #ccc;
+  border-left: 1px solid #ccc;
+  margin-top: 2rem;
+}
+
+.beneficio {
+  padding: 1.5rem;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  background-color: #fff;
+}
+
+@media (max-width: 768px) {
+  .beneficios-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .beneficio {
+    border-right: none;
+  }
+}
+
+/* =========================
+   FOOTER
+   ========================= */
+.footer {
+  background:#fff;
+  padding:3rem 5%;
+  border-top:1px solid #e5e5e5;
+  color:#1c1c1c;
+  font-size:0.95rem;
+}
+
+.footer-content {
+  max-width:1200px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(auto,220px) 1fr minmax(auto,260px);
+  grid-template-areas:
+    "brand credits note";
+  column-gap:3rem;
+  row-gap:1.5rem;
+  align-items:start;
+}
+
+.footer-brand { grid-area:brand; }
+.footer-brand h3 {
+  font-size:1.5rem;
+  font-weight:700;
+  margin-bottom:1rem;
+}
+
+.footer-social {
+  display:flex;
+  gap:0.75rem;
+  font-size:1.25rem;
+  line-height:1;
+}
+
+.footer-social a {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:28px;
+  height:28px;
+  border:1px solid #787878;
+  border-radius:4px;
+  font-size:0.85rem;
+  color:#1c1c1c;
+  text-decoration:none;
+  transition:all 0.2s;
+}
+.footer-social a:hover {
+  color:#2A78DA;
+  border-color:#2A78DA;
+}
+
+.footer-credits { grid-area:credits; text-align:center; }
+.footer-credits h4 {
+  font-size:1rem;
+  margin-bottom:0.75rem;
+  font-weight:700;
+}
+.footer-credits ul {
+  list-style:none;
+  margin:0;
+  padding:0;
+  line-height:1.5;
+}
+.footer-credits a {
+  color:#2A78DA;
+  text-decoration:underline;
+  word-break:break-word;      /* quebra URLs longas */
+}
+
+.footer-note {
+  grid-area:note;
+  text-align:right;
+  font-size:0.85rem;
+  color:#444;
+  align-self:end;              /* encosta no rodapé da coluna p/ parecer alinhado em baixo */
+}
+
+/* Responsivo */
+@media (max-width:768px) {
+  .footer-content {
+    grid-template-columns:1fr;
+    grid-template-areas:
+      "brand"
+      "credits"
+      "note";
+    text-align:center;
+  }
+  .footer-brand,
+  .footer-credits,
+  .footer-note {
+    text-align:center;
+    align-self:center;
+  }
+  .footer-note {
+    margin-top:1.5rem;
+  }
+}
