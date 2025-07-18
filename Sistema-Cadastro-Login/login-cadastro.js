@@ -1,34 +1,76 @@
-const form = document.getElementById("formCadastro");
+function mostrarCadastro() {
+  document.title = "Cadastro - GestMinds";
+  document.getElementById("form-login").classList.add("hidden");
+  document.getElementById("form-cadastro").classList.remove("hidden");
+}
 
-if (form) {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+function mostrarLogin() {
+  document.title = "Login - GestMinds";
+  document.getElementById("form-cadastro").classList.add("hidden");
+  document.getElementById("form-login").classList.remove("hidden");
+}
 
-    const dados = {
-      nome: document.getElementById("nome").value,
-      email: document.getElementById("email").value,
-      senha: document.getElementById("senha").value,
-      telefone: document.getElementById("telefone").value,
-      empresa: document.getElementById("empresa").value,
-      instagram: document.getElementById("instagram").value,
-      site: document.getElementById("site").value,
-      origem: document.getElementById("origem").value || "landing-page"
-    };
+async function fazerLogin() {
+  const email = document.getElementById("login-email").value.trim();
+  const senha = document.getElementById("login-senha").value.trim();
 
-    const res = await fetch("/api/cadastro", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(dados)
-    });
+  if (!email || !senha) {
+    alert("Preencha todos os campos para fazer login.");
+    return;
+  }
 
-    const resultado = await res.json();
-
-    if (resultado.erro) {
-      alert("Erro: " + resultado.erro);
-    } else {
-      alert("✅ Cadastro realizado com sucesso!");
-      form.reset(); // Limpa o formulário
-      modal.style.display = "none"; // Fecha o modal se quiser
-    }
+  const res = await fetch("/api/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, senha }),
   });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert("Login realizado com sucesso!");
+    // window.location.href = "painel.html";
+  } else {
+    alert("Erro: " + data.erro);
+  }
+}
+
+async function fazerCadastro() {
+  const nome = document.getElementById("cadastro-nome").value.trim();
+  const email = document.getElementById("cadastro-email").value.trim();
+  const senha = document.getElementById("cadastro-senha").value.trim();
+  const telefone = document.getElementById("cadastro-telefone").value.trim();
+  const empresa = document.getElementById("cadastro-empresa").value.trim();
+  const instagram = document.getElementById("cadastro-instagram").value.trim();
+  const site = document.getElementById("cadastro-site").value.trim();
+  const origem = document.getElementById("cadastro-origem").value;
+
+  if (!nome || !email || !senha || !telefone || !origem) {
+    alert("Preencha todos os campos obrigatórios.");
+    return;
+  }
+
+  const res = await fetch("/api/cadastro", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      nome,
+      email,
+      senha,
+      telefone,
+      empresa,
+      instagram,
+      site,
+      origem,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (res.ok) {
+    alert("Cadastro realizado com sucesso! Agora faça login.");
+    mostrarLogin();
+  } else {
+    alert("Erro ao cadastrar: " + data.erro);
+  }
 }

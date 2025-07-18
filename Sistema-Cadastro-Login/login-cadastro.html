@@ -37,69 +37,7 @@
       <p>Já tem conta? <a onclick="mostrarLogin()">Fazer login</a></p>
     </div>
 
+<script src="login-cadastro.js"></script>
 
-  <script>
-    function mostrarCadastro() {
-      document.title = "Cadastro - GestMinds"
-      document.getElementById("form-login").classList.add("hidden")
-      document.getElementById("form-cadastro").classList.remove("hidden")
-    }
-
-    function mostrarLogin() {
-      document.title = "Login - GestMinds"
-      document.getElementById("form-cadastro").classList.add("hidden")
-      document.getElementById("form-login").classList.remove("hidden")
-    }
-
-    async function fazerLogin() {
-      const email = document.getElementById("login-email").value.trim()
-      const senha = document.getElementById("login-senha").value.trim()
-
-      if (!email || !senha) {
-        alert("Preencha todos os campos para fazer login.")
-        return
-      }
-
-      const res = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-      })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        alert("Login realizado com sucesso!")
-        // window.location.href = "painel.html"
-      } else {
-        alert("Erro: " + data.erro)
-      }
-    }
-
-    async function fazerCadastro() {
-      const email = document.getElementById("cadastro-email").value.trim()
-      const senha = document.getElementById("cadastro-senha").value.trim()
-
-      if (!email || !senha) {
-        alert("Preencha todos os campos para se cadastrar.")
-        return
-      }
-
-      const res = await fetch("/api/cadastro", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, senha }),
-      })
-
-      const data = await res.json()
-
-      if (res.ok) {
-        alert("Cadastro realizado! Agora faça login.")
-        mostrarLogin()
-      } else {
-        alert("Erro: " + data.erro)
-      }
-    }
-  </script>
 </body>
 </html>
