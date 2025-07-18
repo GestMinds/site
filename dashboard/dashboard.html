@@ -1,0 +1,34 @@
+<!-- dashboard.html -->
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Área do Cliente - GestMinds</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="dashboard-container">
+    <h1>Bem-vindo(a), <span id="cliente-nome"></span></h1>
+
+    <section>
+      <h2>Status do Projeto</h2>
+      <p id="status-projeto">Carregando...</p>
+    </section>
+
+    <section>
+      <h2>Progresso</h2>
+      <div class="barra-progresso">
+        <div id="progresso" style="width: 0%">0%</div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Histórico de Pedidos</h2>
+      <ul id="historico-pedidos"></ul>
+    </section>
+  </div>
+  
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

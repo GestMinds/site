@@ -6,7 +6,7 @@
 
 body {
   font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, white);
+  background: linear-gradient(135deg, #121212);
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -15,10 +15,11 @@ body {
 }
 
 .container {
-  background: white;
+  background: #FF512F;
+  background: linear-gradient(90deg,rgba(255, 81, 47, 1) 9%, rgba(221, 36, 118, 1) 100%);
   padding: 40px 30px;
   border-radius: 10px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 20px 220px rgba(255, 255, 255, 0.2);
   width: 100%;
   max-width: 400px;
   transition: all 0.3s ease-in-out;
@@ -29,6 +30,7 @@ body {
   flex-direction: column;
   gap: 15px;
   animation: fade 0.3s ease;
+  color: #ffffff;
 }
 
 input {
@@ -39,8 +41,8 @@ input {
 }
 
 button {
-  background-color: #0070f3;
-  color: white;
+  background-color: #000000;
+  color: rgb(255, 255, 255);
   padding: 12px;
   border: none;
   border-radius: 8px;
@@ -50,7 +52,8 @@ button {
 }
 
 button:hover {
-  background-color: #005dc1;
+  background-color: #ffffff;
+  color: #000000;
 }
 
 p {
@@ -59,7 +62,7 @@ p {
 }
 
 a {
-  color: #0070f3;
+  color: #ffffff;
   cursor: pointer;
   text-decoration: none;
   font-weight: bold;
@@ -98,4 +101,5 @@ a:hover {
   text-align: center;
   font-size: 24px;
   margin-bottom: 10px;
+  color: #ffffff;
 }

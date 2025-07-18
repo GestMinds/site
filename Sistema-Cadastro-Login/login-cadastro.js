@@ -14,9 +14,6 @@ async function fazerLogin() {
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
 
-  // 🔍 Adicione esse log aqui
-  console.log('Enviado login:', { email, senha });
-
   if (!email || !senha) {
     alert("Preencha todos os campos para fazer login.");
     return;
@@ -31,7 +28,11 @@ async function fazerLogin() {
   const data = await res.json();
 
   if (res.ok) {
-    alert("Login realizado com sucesso!");
+    // ✅ Salvar e-mail no localStorage
+    localStorage.setItem("usuarioEmail", email);
+
+    // ✅ Redirecionar para a dashboard
+    window.location.href = "/dashboard/dashboard.html";
   } else {
     alert("Erro: " + data.erro);
   }
