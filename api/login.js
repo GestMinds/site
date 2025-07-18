@@ -8,25 +8,24 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const { email, senha } = req.body;
+  let { email, senha } = req.body;
+
+  // Remove espaços
+  email = email?.trim();
+  senha = senha?.trim();
 
   if (!email || !senha) {
     return res.status(400).json({ erro: "Email e senha são obrigatórios." });
   }
 
-  // Retira espaços acidentais
-  const emailLimpo = email.trim();
-
-  // Busca o usuário pelo email
   const { data: usuarios, error } = await supabase
     .from("usuarios")
     .select("*")
-    .eq("email", emailLimpo)
+    .eq("email", email)
     .limit(1)
-    .single(); // pega só 1
+    .single();
 
-  // 👇 Coloca o log aqui, depois da resposta
-  console.log("🔍 Buscando usuário com email:", emailLimpo);
+  console.log("🔍 Buscando usuário com email:", email);
   console.log("📦 Resultado:", usuarios, error);
 
   if (error) {
@@ -36,7 +35,6 @@ export default async function handler(req, res) {
     return res.status(500).json({ erro: "Erro ao buscar usuário: " + error.message });
   }
 
-  // Verifica a senha
   if (usuarios.senha !== senha) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }

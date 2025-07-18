@@ -11,7 +11,17 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { nome, email, senha, telefone, empresa, instagram, site, origem } = req.body;
+    let { nome, email, senha, telefone, empresa, instagram, site, origem } = req.body;
+
+    // Limpa espaços acidentais
+    nome = nome?.trim();
+    email = email?.trim();
+    senha = senha?.trim();
+    telefone = telefone?.trim();
+    empresa = empresa?.trim();
+    instagram = instagram?.trim();
+    site = site?.trim();
+    origem = origem?.trim();
 
     if (!nome || !email || !senha || !telefone || !origem) {
       return res.status(400).json({ erro: "Preencha todos os campos obrigatórios." });
