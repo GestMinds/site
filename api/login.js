@@ -8,35 +8,41 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  let { email, senha } = req.body;
+  try {
+    const { email, senha } = req.body;
 
-  // Remove espaços
-  email = email?.trim();
-  senha = senha?.trim();
+    if (!email || !senha) {
+      return res.status(400).json({ erro: "Email e senha são obrigatórios." });
+    }
 
-  if (!email || !senha) {
-    return res.status(400).json({ erro: "Email e senha são obrigatórios." });
+    // ✅ Limpa espaços em branco
+    const emailLimpo = email.trim();
+
+    // 🔍 Busca o usuário pelo e-mail
+    const { data, error } = await supabase
+      .from("usuarios")
+      .select("*")
+      .eq("email", emailLimpo)
+      .limit(1);
+
+    const usuario = data && data.length > 0 ? data[0] : null;
+
+    console.log("🔍 Buscando usuário com email:", emailLimpo);
+    console.log("📦 Resultado:", usuario, error);
+
+    if (!usuario) {
+      return res.status(401).json({ erro: "Email não encontrado" });
+    }
+
+    // ✅ Verifica a senha
+    if (usuario.senha !== senha) {
+      return res.status(401).json({ erro: "Senha incorreta" });
+    }
+
+    return res.status(200).json({ mensagem: "Login realizado com sucesso!" });
+
+  } catch (err) {
+    console.error("Erro no login:", err.message);
+    return res.status(500).json({ erro: "Erro interno no servidor." });
   }
-
-  const { data, error } = await supabase
-  .from("usuarios")
-  .select("*")
-  .eq("email", emailLimpo)
-  .limit(1);
-
-  const usuario = data && data.length > 0 ? data[0] : null;
-
-  console.log("🔍 Buscando usuário com email:", emailLimpo);
-  console.log("📦 Resultado:", usuario, error);
-
-  if (!usuario) {
-    return res.status(401).json({ erro: "Email não encontrado" });
-  }
-
-  if (usuario.senha !== senha) {
-    return res.status(401).json({ erro: "Senha incorreta" });
-  }
-
-
-  return res.status(200).json({ mensagem: "Login realizado com sucesso!" });
 }
