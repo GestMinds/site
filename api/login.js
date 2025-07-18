@@ -8,7 +8,8 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const { email, senha } = req.body;
+  const email = req.body.email?.trim();
+  const senha = req.body.senha?.trim();
 
   if (!email || !senha) {
     return res.status(400).json({ erro: "Email e senha são obrigatórios." });
@@ -19,11 +20,11 @@ export default async function handler(req, res) {
   const { data: usuarios, error } = await supabase
     .from("usuarios")
     .select("*")
-    .eq("email", email.trim())
-    .eq("senha", senha.trim());
+    .ilike("email", email) // ignora maiúsculas/minúsculas
+    .eq("senha", senha);   // senha ainda exata (sem hash por enquanto)
 
   if (error) {
-    console.error("Erro no Supabase:", error);
+    console.error("Erro Supabase:", error);
     return res.status(500).json({ erro: "Erro no servidor: " + error.message });
   }
 
