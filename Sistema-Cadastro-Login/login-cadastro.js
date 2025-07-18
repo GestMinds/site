@@ -14,6 +14,9 @@ async function fazerLogin() {
   const email = document.getElementById("login-email").value.trim();
   const senha = document.getElementById("login-senha").value.trim();
 
+  // 🔍 Adicione esse log aqui
+  console.log('Enviado login:', { email, senha });
+
   if (!email || !senha) {
     alert("Preencha todos os campos para fazer login.");
     return;
@@ -29,11 +32,11 @@ async function fazerLogin() {
 
   if (res.ok) {
     alert("Login realizado com sucesso!");
-    // window.location.href = "painel.html";
   } else {
     alert("Erro: " + data.erro);
   }
 }
+
 
 async function fazerCadastro() {
   const nome = document.getElementById("cadastro-nome").value.trim();
