@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - GestMinds</title>
+  <link rel="stylesheet" href="login-cadastro.css" />
+  <link rel="icon" type="image/png" href="../img/logo empresa.png" />
+</head>
+<body>
+  <div class="container">
+    <div id="form-login" class="form">
+      <h2 class="titulo">Login</h2>
+      <input type="email" id="login-email" placeholder="Email" required />
+      <input type="password" id="login-senha" placeholder="Senha" required />
+      <button onclick="fazerLogin()">Entrar</button>
+      <p>Não tem conta? <a onclick="mostrarCadastro()">Cadastre-se</a></p>
+    </div>
+
+    <div id="form-cadastro" class="form hidden">
+      <h2 class="titulo">Cadastro</h2>
+      <input type="text" id="cadastro-nome" placeholder="Nome completo" required />
+      <input type="email" id="cadastro-email" placeholder="Email" required />
+      <input type="password" id="cadastro-senha" placeholder="Senha" required />
+      <input type="tel" id="cadastro-telefone" placeholder="Telefone (WhatsApp)" required />
+      <input type="text" id="cadastro-empresa" placeholder="Nome da empresa ou negócio (opcional)" />
+      <input type="text" id="cadastro-instagram" placeholder="Instagram ou outra rede social (opcional)" />
+      <input type="url" id="cadastro-site" placeholder="Site atual (se tiver)" />
+      <select id="cadastro-origem" required>
+        <option value="">Como nos encontrou?</option>
+        <option value="Instagram">Instagram</option>
+        <option value="Google">Google</option>
+        <option value="Indicação">Indicação</option>
+        <option value="Outro">Outro</option>
+      </select>
+      <button onclick="fazerCadastro()">Cadastrar</button>
+      <p>Já tem conta? <a onclick="mostrarLogin()">Fazer login</a></p>
+    </div>
+
+
+  <script>
+    function mostrarCadastro() {
+      document.title = "Cadastro - GestMinds"
+      document.getElementById("form-login").classList.add("hidden")
+      document.getElementById("form-cadastro").classList.remove("hidden")
+    }
+
+    function mostrarLogin() {
+      document.title = "Login - GestMinds"
+      document.getElementById("form-cadastro").classList.add("hidden")
+      document.getElementById("form-login").classList.remove("hidden")
+    }
+
+    async function fazerLogin() {
+      const email = document.getElementById("login-email").value.trim()
+      const senha = document.getElementById("login-senha").value.trim()
+
+      if (!email || !senha) {
+        alert("Preencha todos os campos para fazer login.")
+        return
+      }
+
+      const res = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        alert("Login realizado com sucesso!")
+        // window.location.href = "painel.html"
+      } else {
+        alert("Erro: " + data.erro)
+      }
+    }
+
+    async function fazerCadastro() {
+      const email = document.getElementById("cadastro-email").value.trim()
+      const senha = document.getElementById("cadastro-senha").value.trim()
+
+      if (!email || !senha) {
+        alert("Preencha todos os campos para se cadastrar.")
+        return
+      }
+
+      const res = await fetch("/api/cadastro", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, senha }),
+      })
+
+      const data = await res.json()
+
+      if (res.ok) {
+        alert("Cadastro realizado! Agora faça login.")
+        mostrarLogin()
+      } else {
+        alert("Erro: " + data.erro)
+      }
+    }
+  </script>
+</body>
+</html>
