@@ -18,26 +18,25 @@ export default async function handler(req, res) {
     return res.status(400).json({ erro: "Email e senha são obrigatórios." });
   }
 
-  const { data: usuarios, error } = await supabase
-    .from("usuarios")
-    .select("*")
-    .eq("email", email)
-    .limit(1)
-    .single();
+  const { data, error } = await supabase
+  .from("usuarios")
+  .select("*")
+  .eq("email", emailLimpo)
+  .limit(1);
 
-  console.log("🔍 Buscando usuário com email:", email);
-  console.log("📦 Resultado:", usuarios, error);
+  const usuario = data && data.length > 0 ? data[0] : null;
 
-  if (error) {
-    if (error.code === "PGRST116") {
-      return res.status(401).json({ erro: "Email não encontrado" });
-    }
-    return res.status(500).json({ erro: "Erro ao buscar usuário: " + error.message });
+  console.log("🔍 Buscando usuário com email:", emailLimpo);
+  console.log("📦 Resultado:", usuario, error);
+
+  if (!usuario) {
+    return res.status(401).json({ erro: "Email não encontrado" });
   }
 
-  if (usuarios.senha !== senha) {
+  if (usuario.senha !== senha) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
+
 
   return res.status(200).json({ mensagem: "Login realizado com sucesso!" });
 }
