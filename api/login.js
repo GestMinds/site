@@ -8,31 +8,31 @@ const supabase = createClient(
 export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).end();
 
-  const email = req.body.email?.trim();
-  const senha = req.body.senha?.trim();
-
-  if (!email || !senha) {
-    return res.status(400).json({ erro: "Email e senha são obrigatórios." });
-  }
+  const { email, senha } = req.body;
 
   console.log("🛠️ Dados recebidos:", { email, senha });
 
-  const { data, error } = await supabase
+  const { data: usuarios, error } = await supabase
     .from("usuarios")
     .select("*")
-    .eq("email", email)
-    .eq("senha", senha);
+    .eq("email", email);
+
+  console.log("📦 Resultado da consulta:", usuarios);
 
   if (error) {
-    console.error("❌ Erro Supabase:", error.message);
+    console.error("❌ Erro no Supabase:", error);
     return res.status(500).json({ erro: "Erro no servidor: " + error.message });
   }
 
-  console.log("📦 Resultado da consulta:", data);
-
-  if (!data || data.length === 0) {
-    return res.status(401).json({ erro: "Email ou senha inválidos" });
+  if (!usuarios || usuarios.length === 0) {
+    return res.status(401).json({ erro: "Email não encontrado" });
   }
 
-  return res.status(200).json({ mensagem: "Login realizado com sucesso!", usuario: data[0] });
+  const user = usuarios[0];
+
+  if (user.senha !== senha) {
+    return res.status(401).json({ erro: "Senha incorreta" });
+  }
+
+  return res.status(200).json({ mensagem: "Login realizado com sucesso!" });
 }
