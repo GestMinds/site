@@ -121,3 +121,11 @@ li {
   background-color: #004d40;
   color: #fff;
 }
+
+#novo-pedido input, #novo-pedido select {
+  display: block;
+  width: 100%;
+  margin: 6px 0;
+  padding: 8px;
+  border: 1px solid #ccc;
+}

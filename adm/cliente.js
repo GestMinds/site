@@ -46,3 +46,35 @@ window.onload = async () => {
     alert("Erro ao carregar dados: " + err.message);
   }
 };
+
+async function adicionarPedido() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const email = urlParams.get("email");
+
+  const titulo = document.getElementById("pedido-titulo").value.trim();
+  const valor = parseFloat(document.getElementById("pedido-valor").value);
+  const status = document.getElementById("pedido-status").value;
+
+  if (!titulo || isNaN(valor)) {
+    alert("Preencha todos os campos corretamente.");
+    return;
+  }
+
+  try {
+    const res = await fetch("/api/admin/novo-pedido", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, titulo, valor, status })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.erro || "Erro ao adicionar pedido");
+
+    alert("Pedido adicionado com sucesso!");
+    location.reload();
+
+  } catch (err) {
+    alert("Erro: " + err.message);
+  }
+}

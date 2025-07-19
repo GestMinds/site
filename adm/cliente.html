@@ -18,6 +18,19 @@
     <section class="card" id="historico-cliente">Carregando histórico...</section>
   </main>
 
+    <section class="card" id="novo-pedido">
+        <h2>➕ Novo Pedido</h2>
+        <input type="text" id="pedido-titulo" placeholder="Título do pedido" />
+        <input type="number" id="pedido-valor" placeholder="Valor (R$)" />
+        <select id="pedido-status">
+            <option value="pendente">Pendente</option>
+            <option value="em andamento">Em andamento</option>
+            <option value="concluído">Concluído</option>
+        </select>
+        <button onclick="adicionarPedido()">Salvar Pedido</button>
+    </section>
+
+
   <script src="cliente.js"></script>
 </body>
 </html>
