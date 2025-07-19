@@ -18,11 +18,10 @@ export default async function handler(req, res) {
 
   const emailLimpo = email.trim().toLowerCase();
 
-  // Faz a query usando ilike pra ignorar case
   const { data, error } = await supabase
     .from("usuarios")
     .select("*")
-    .ilike('email', emailLimpo)
+    .ilike("email", emailLimpo)
     .limit(1);
 
   if (error) {
@@ -42,21 +41,10 @@ export default async function handler(req, res) {
     return res.status(401).json({ erro: "Senha incorreta" });
   }
 
-  return res.status(200).json({ mensagem: "Login realizado com sucesso!" });
+  // ✅ Resposta para o cliente (navegador)
+  return res.status(200).json({
+    mensagem: "Login realizado com sucesso!",
+    email: usuario.email,
+    nome: usuario.nome || "", // se você tiver esse campo
+  });
 }
-
-  const email = usuario.email;
-
-  localStorage.setItem("usuarioEmail", email);
-
-  const admins = [
-    "empresarialvitorbr@outlook.com",
-    "ph0984596@gmail.com"
-  ];
-
-  if (admins.includes(email.toLowerCase())) {
-    window.location.href = "/adm/admin.html";
-  } else {
-    window.location.href = "/dashboard/dashboard.html";
-  }
-

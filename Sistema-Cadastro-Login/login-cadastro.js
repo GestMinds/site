@@ -11,33 +11,36 @@ function mostrarLogin() {
 }
 
 async function fazerLogin() {
-  const email = document.getElementById("login-email").value.trim();
-  const senha = document.getElementById("login-senha").value.trim();
-
-  if (!email || !senha) {
-    alert("Preencha todos os campos para fazer login.");
-    return;
-  }
+  const email = document.getElementById("email").value;
+  const senha = document.getElementById("senha").value;
 
   const res = await fetch("/api/login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, senha }),
+    body: JSON.stringify({ email, senha })
   });
 
   const data = await res.json();
 
-  if (res.ok) {
-    // ✅ Salvar e-mail no localStorage
-    localStorage.setItem("usuarioEmail", email);
+  if (!res.ok) {
+    alert(data.erro || "Erro ao logar.");
+    return;
+  }
 
-    // ✅ Redirecionar para a dashboard
-    window.location.href = "/dashboard/dashboard.html";
+  // ✅ AQUI pode usar localStorage
+  localStorage.setItem("usuarioEmail", data.email);
+
+  const admins = [
+    "empresarialvitorbr@outlook.com",
+    "ph0984596@gmail.com"
+  ];
+
+  if (admins.includes(data.email.toLowerCase())) {
+    window.location.href = "/adm/admin.html";
   } else {
-    alert("Erro: " + data.erro);
+    window.location.href = "/dashboard/dashboard.html";
   }
 }
-
 
 async function fazerCadastro() {
   const nome = document.getElementById("cadastro-nome").value.trim();
