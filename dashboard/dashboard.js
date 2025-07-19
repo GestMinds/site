@@ -15,8 +15,8 @@ window.onload = async () => {
   }
 
   // Nome e status
-    document.getElementById("boas-vindas").innerText = `Bem-vindo, ${data.nome}`;
-    document.getElementById("status-projeto").innerText = data.status_projeto || "Em análise";
+  document.getElementById("boas-vindas").innerText = `Bem-vindo, ${data.nome}`;
+  document.getElementById("status-projeto").innerText = data.status_projeto || "Em análise";
 
   // Progresso
   const progresso = data.progresso || 0;
@@ -46,11 +46,47 @@ window.onload = async () => {
 
   // Histórico
   const historico = document.getElementById("historico-pedidos");
+  historico.innerHTML = "";
+
+  let totalCompras = 0;
+
   data.historico.forEach(pedido => {
     const li = document.createElement("li");
-    li.innerHTML = `${pedido.data} - <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)} <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver</button>`;
+
+    // Andamento
+    const andamentoContainer = document.getElementById("andamento-pedidos");
+    andamentoContainer.innerHTML = "";
+
+    const emAndamento = data.historico.filter(p => p.status.toLowerCase() !== "concluído");
+
+    if (emAndamento.length === 0) {
+      andamentoContainer.innerHTML = "<li>Nenhum projeto em andamento no momento.</li>";
+    } else {
+      emAndamento.forEach(pedido => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)}<br>
+          <small>${new Date(pedido.created_at).toLocaleDateString("pt-BR")}</small><br>
+          Status: <em>${pedido.status}</em><br>
+          <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver Detalhes</button>
+        `;
+        andamentoContainer.appendChild(li);
+      });
+    }
+
+    // Converte data (se vier em formato ISO)
+    const dataFormatada = new Date(pedido.created_at).toLocaleDateString('pt-BR');
+
+    li.innerHTML = `${dataFormatada} - <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)} <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver</button>`;
     historico.appendChild(li);
+
+    totalCompras += pedido.valor;
   });
+
+  // Mostrar total de compras
+  const totalDiv = document.createElement("p");
+  totalDiv.innerText = `💰 Total gasto: R$${totalCompras.toFixed(2)}`;
+  historico.parentElement.insertBefore(totalDiv, historico);
 
   // Modal de detalhes
   document.querySelectorAll(".ver-btn").forEach(btn => {
@@ -80,6 +116,7 @@ window.onload = async () => {
   });
 };
 
+// Redirecionamento admin
 const email = localStorage.getItem("usuarioEmail");
 
 const admins = [
