@@ -3,6 +3,8 @@ window.onload = async () => {
   const email = localStorage.getItem("usuarioEmail");
   const admins = ["empresarialvitorbr@outlook.com", "ph0984596@gmail.com"];
 
+  
+
   if (!email || !admins.includes(email.toLowerCase())) {
     alert("Acesso negado! Você não é um administrador.");
     window.location.href = "/dashboard/dashboard.html";
