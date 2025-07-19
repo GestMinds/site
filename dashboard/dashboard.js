@@ -36,4 +36,6 @@ function logout() {
   localStorage.removeItem("usuarioEmail");
   window.location.href = "/Sistema-Cadastro-Login/login-cadastro.html";
 }
+const notificacoes = document.getElementById("notificacoes");
+notificacoes.innerText = "Seu projeto entrou na fase de revisão!";
 

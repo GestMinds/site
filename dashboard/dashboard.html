@@ -5,8 +5,16 @@
   <meta charset="UTF-8" />
   <title>Área do Cliente - GestMinds</title>
   <link rel="stylesheet" href="dashboard.css">
+  <div id="notificacoes" class="notificacoes"></div>
+
 </head>
 <body>
+    
+    <header class="top-bar">
+        <h1>Bem-vindo(a), <span id="cliente-nome">...</span></h1>
+        <button onclick="logout()">Sair</button>
+    </header>
+
   <div class="dashboard-container">
     <h1>Bem-vindo(a), <span id="cliente-nome"></span></h1>
 
@@ -15,18 +23,45 @@
       <p id="status-projeto">Carregando...</p>
     </section>
 
-    <section>
-      <h2>Progresso</h2>
-      <div class="barra-progresso">
-        <div id="progresso" style="width: 0%">0%</div>
-      </div>
+    <section class="progresso-section">
+        <h2>Progresso</h2>
+        <div class="barra-progresso">
+            <div id="progresso" class="progresso-preenchido">0%</div>
+        </div>
+    </section>
+
+
+    <section class="historico-section">
+    <h2>Histórico de Pedidos</h2>
+    <ul id="historico-pedidos" class="lista-historico"></ul>
+    </section>
+
+
+    <section class="status-section">
+    <h2>Status do Projeto</h2>
+    <p id="status-projeto">Carregando...</p>
+    </section>
+
+    <section class="suporte">
+    <h2>Precisa de ajuda?</h2>
+    <a href="https://wa.me/55SEUNUMERO" target="_blank">
+        <button class="whatsapp-btn">Falar com suporte</button>
+    </a>
+    </section>
+
+    <section class="downloads">
+    <h2>Arquivos Entregues</h2>
+    <ul>
+        <li><a href="/entregas/projeto1.pdf" download>Projeto 1 (PDF)</a></li>
+        <li><a href="/entregas/site-final.zip" download>Site Final (ZIP)</a></li>
+    </ul>
     </section>
 
     <section>
-      <h2>Histórico de Pedidos</h2>
-      <ul id="historico-pedidos"></ul>
+        <h2>Configurações</h2>
+        <button onclick="alert('Em breve!')">Editar Perfil</button>
     </section>
-  </div>
+
   
 
   <script src="dashboard.js"></script>
