@@ -48,35 +48,32 @@ window.onload = async () => {
   const historico = document.getElementById("historico-pedidos");
   historico.innerHTML = "";
 
+  // Andamento
+  const andamentoContainer = document.getElementById("andamento-pedidos");
+  andamentoContainer.innerHTML = "";
+
+  const emAndamento = data.pedidos.filter(p => p.status.toLowerCase() !== "concluído");
+
+  if (emAndamento.length === 0) {
+    andamentoContainer.innerHTML = "<li>Nenhum projeto em andamento no momento.</li>";
+  } else {
+    emAndamento.forEach(pedido => {
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)}<br>
+        <small>${new Date(pedido.created_at).toLocaleDateString("pt-BR")}</small><br>
+        Status: <em>${pedido.status}</em><br>
+        <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver Detalhes</button>
+      `;
+      andamentoContainer.appendChild(li);
+    });
+  }
+
   let totalCompras = 0;
 
-  data.historico.forEach(pedido => {
+  data.pedidos.forEach(pedido => {
     const li = document.createElement("li");
-
-    // Andamento
-    const andamentoContainer = document.getElementById("andamento-pedidos");
-    andamentoContainer.innerHTML = "";
-
-    const emAndamento = data.historico.filter(p => p.status.toLowerCase() !== "concluído");
-
-    if (emAndamento.length === 0) {
-      andamentoContainer.innerHTML = "<li>Nenhum projeto em andamento no momento.</li>";
-    } else {
-      emAndamento.forEach(pedido => {
-        const li = document.createElement("li");
-        li.innerHTML = `
-          <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)}<br>
-          <small>${new Date(pedido.created_at).toLocaleDateString("pt-BR")}</small><br>
-          Status: <em>${pedido.status}</em><br>
-          <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver Detalhes</button>
-        `;
-        andamentoContainer.appendChild(li);
-      });
-    }
-
-    // Converte data (se vier em formato ISO)
     const dataFormatada = new Date(pedido.created_at).toLocaleDateString('pt-BR');
-
     li.innerHTML = `${dataFormatada} - <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)} <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver</button>`;
     historico.appendChild(li);
 
@@ -88,6 +85,8 @@ window.onload = async () => {
   totalDiv.innerText = `💰 Total gasto: R$${totalCompras.toFixed(2)}`;
   historico.parentElement.insertBefore(totalDiv, historico);
 
+
+  // Modal de detalhes
   // Modal de detalhes
   document.querySelectorAll(".ver-btn").forEach(btn => {
     btn.addEventListener("click", () => {
@@ -95,6 +94,7 @@ window.onload = async () => {
       document.getElementById("pedido-modal").classList.remove("hidden");
     });
   });
+
 
   document.querySelector(".close-modal").addEventListener("click", () => {
     document.getElementById("pedido-modal").classList.add("hidden");
