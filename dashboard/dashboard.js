@@ -39,3 +39,10 @@ function logout() {
 const notificacoes = document.getElementById("notificacoes");
 notificacoes.innerText = "Seu projeto entrou na fase de revisão!";
 
+  function abrirModalDetalhes() {
+    document.getElementById("modal-detalhes").classList.remove("hidden");
+}
+
+  function fecharModalDetalhes() {
+    document.getElementById("modal-detalhes").classList.add("hidden");
+}

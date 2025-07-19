@@ -65,6 +65,26 @@
       <button class="btn-config" onclick="alert('Em breve!')">Editar Perfil</button>
     </section>
 
+    <!-- Botão de detalhes -->
+    <button class="btn-detalhes" onclick="abrirModalDetalhes()">
+    Ver detalhes do pedido
+    </button>
+
+    <!-- Modal de Detalhes -->
+    <div id="modal-detalhes" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="modal-close" onclick="fecharModalDetalhes()">×</span>
+        <h2>Detalhes do Pedido</h2>
+        <p><strong>Projeto:</strong> Criação de Identidade Visual</p>
+        <p><strong>Descrição:</strong> Design de logo, paleta de cores e manual de marca.</p>
+        <p><strong>Status:</strong> Em produção</p>
+        <p><strong>Prazo estimado:</strong> 25 de Julho de 2025</p>
+        <p><strong>Responsável:</strong> Equipe de Design</p>
+        <!-- Aqui você pode depois preencher dinamicamente com JS -->
+    </div>
+    </div>
+
+
   </div>
 
   <script>
