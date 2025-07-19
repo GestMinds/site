@@ -107,3 +107,17 @@ li {
     grid-template-columns: 1fr;
   }
 }
+
+.cliente-btn {
+  all: unset;
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 12px;
+  cursor: pointer;
+}
+
+.cliente-btn:hover {
+  background-color: #004d40;
+  color: #fff;
+}

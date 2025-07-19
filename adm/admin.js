@@ -63,10 +63,15 @@ window.onload = async () => {
       div.style.padding = "8px";
       div.style.borderBottom = "1px solid #004d40";
       div.innerHTML = `
+      <button class="cliente-btn" onclick="window.location.href='/adm/cliente.html?email=${encodeURIComponent(user.email)}'">
         <strong>${user.nome}</strong> (${user.email})<br>
         Status: ${user.status_projeto || "N/A"}<br>
         Progresso: ${user.progresso || 0}%
-      `;
+      </button>
+    `;
+    div.style.padding = "0";
+    div.style.borderBottom = "1px solid #004d40";
+
       clientesContainer.appendChild(div);
     });
 
