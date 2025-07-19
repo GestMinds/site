@@ -1,3 +1,4 @@
+/* RESET */
 * {
   margin: 0;
   padding: 0;
@@ -5,43 +6,75 @@
 }
 
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #f5f6fa;
-  color: #333;
+  font-family: 'Segoe UI', Roboto, sans-serif;
+  background: linear-gradient(145deg, #1e1e2f, #28293d);
+  color: #fff;
   padding: 10px;
+  min-height: 100vh;
 }
 
+/* CABEÇALHO */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #ff512f, #dd2476);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   color: #fff;
   padding: 15px;
-  border-radius: 10px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
 }
 
+/* BOTÃO LOGOUT */
+#logout-btn {
+  background: #ff4b5c;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+#logout-btn:hover {
+  background: #e63746;
+}
+
+/* CONTAINER */
 .container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
   margin-top: 20px;
 }
 
+/* CARDS */
 .card {
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border-radius: 16px;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  transition: transform 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
 }
 
 .card h2 {
   margin-bottom: 10px;
-  color: #dd2476;
+  color: #00e3aa;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .progress-bar {
-  background: #ddd;
+  background: #333;
   border-radius: 20px;
   overflow: hidden;
   height: 25px;
@@ -50,11 +83,12 @@ body {
 
 .progress-fill {
   height: 100%;
-  background: #dd2476;
+  background: #00e3aa;
   text-align: center;
   color: white;
   line-height: 25px;
   transition: width 0.5s ease;
+  font-weight: bold;
 }
 
 ul {
@@ -64,41 +98,54 @@ ul {
 
 li {
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
-.whatsapp-btn {
-  display: inline-block;
-  background-color: #25d366;
-  color: white;
-  padding: 10px 16px;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
+/* BOTÕES WHATSAPP */
+.suporte-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   margin-top: 10px;
 }
 
-#logout-btn {
-  background: black;
+.whatsapp-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: bold;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 8px;
   color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-#logout-btn:hover {
-  background: red;
+.whatsapp-btn img {
+  width: 24px;
+  height: 24px;
 }
 
-/* Modal */
+.whatsapp-btn:hover {
+  transform: scale(1.03);
+}
+
+.whatsapp-btn.vitinho {
+  background-color: #128C7E;
+}
+
+.whatsapp-btn.amorim {
+  background-color: #34B7F1;
+}
+
+/* MODAL */
 .modal {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -106,11 +153,12 @@ li {
 }
 
 .modal-content {
-  background: white;
+  background: rgba(30,30,40,0.95);
   padding: 20px;
   border-radius: 10px;
   width: 90%;
   max-width: 400px;
+  color: white;
 }
 
 .close-modal {
@@ -123,21 +171,19 @@ li {
   display: none;
 }
 
-/* Responsivo */
-@media (max-width: 768px) {
-  .header h1 {
-    font-size: 20px;
+/* RESPONSIVO EXTRA */
+@media (max-width: 600px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
   }
 
-  .card {
-    padding: 15px;
+  #logout-btn {
+    width: 100%;
   }
 
-  .progress-fill {
-    font-size: 14px;
-  }
-
-  .modal-content {
-    width: 95%;
+  .card h2 {
+    font-size: 18px;
   }
 }

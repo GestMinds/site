@@ -15,8 +15,8 @@ window.onload = async () => {
   }
 
   // Nome e status
-  document.getElementById("cliente-nome").innerText = data.nome;
-  document.getElementById("status-projeto").innerText = data.status_projeto || "Em análise";
+    document.getElementById("boas-vindas").innerText = `Bem-vindo, ${data.nome}`;
+    document.getElementById("status-projeto").innerText = data.status_projeto || "Em análise";
 
   // Progresso
   const progresso = data.progresso || 0;
