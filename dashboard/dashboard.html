@@ -1,69 +1,77 @@
-<!-- dashboard.html -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <title>Área do Cliente - GestMinds</title>
-  <link rel="stylesheet" href="dashboard.css">
-  <div id="notificacoes" class="notificacoes"></div>
-
+  <link rel="stylesheet" href="dashboard.css" />
 </head>
 <body>
-    
+  <div class="dashboard-wrapper">
+
+    <!-- Notificações -->
+    <div class="notificacoes" id="notificacoes">
+      🔔 Bem-vindo! Aqui você acompanha tudo sobre seu projeto.
+    </div>
+
+    <!-- Topo com nome e logout -->
     <header class="top-bar">
-        <h1>Bem-vindo(a), <span id="cliente-nome">...</span></h1>
-        <button onclick="logout()">Sair</button>
+      <h1>Olá, <span id="cliente-nome">Cliente</span> 👋</h1>
+      <button onclick="logout()" class="btn-logout">Sair</button>
     </header>
 
-  <div class="dashboard-container">
-    <h1>Bem-vindo(a), <span id="cliente-nome"></span></h1>
-
-    <section>
+    <!-- Status do Projeto -->
+    <section class="card">
       <h2>Status do Projeto</h2>
-      <p id="status-projeto">Carregando...</p>
+      <p id="status-projeto">Em produção</p>
     </section>
 
-    <section class="progresso-section">
-        <h2>Progresso</h2>
-        <div class="barra-progresso">
-            <div id="progresso" class="progresso-preenchido">0%</div>
-        </div>
+    <!-- Progresso -->
+    <section class="card">
+      <h2>Progresso</h2>
+      <div class="barra-progresso">
+        <div id="progresso" class="progresso-preenchido">60%</div>
+      </div>
     </section>
 
-
-    <section class="historico-section">
-    <h2>Histórico de Pedidos</h2>
-    <ul id="historico-pedidos" class="lista-historico"></ul>
+    <!-- Histórico de pedidos -->
+    <section class="card">
+      <h2>Histórico de Pedidos</h2>
+      <ul id="historico-pedidos" class="lista-historico">
+        <li><strong>20/06/2025</strong> - Projeto Logo - R$300</li>
+        <li><strong>05/07/2025</strong> - Site Institucional - R$1500</li>
+      </ul>
     </section>
 
-
-    <section class="status-section">
-    <h2>Status do Projeto</h2>
-    <p id="status-projeto">Carregando...</p>
+    <!-- Arquivos -->
+    <section class="card">
+      <h2>Arquivos Entregues</h2>
+      <ul class="lista-downloads">
+        <li><a href="#">Logo_Final.pdf</a></li>
+        <li><a href="#">Website_v1.zip</a></li>
+      </ul>
     </section>
 
-    <section class="suporte">
-    <h2>Precisa de ajuda?</h2>
-    <a href="https://wa.me/55SEUNUMERO" target="_blank">
-        <button class="whatsapp-btn">Falar com suporte</button>
-    </a>
+    <!-- Suporte -->
+    <section class="card suporte">
+      <h2>Precisa de ajuda?</h2>
+      <a href="https://wa.me/55SEUNUMERO" target="_blank">
+        <button class="whatsapp-btn">Falar com Suporte no WhatsApp</button>
+      </a>
     </section>
 
-    <section class="downloads">
-    <h2>Arquivos Entregues</h2>
-    <ul>
-        <li><a href="/entregas/projeto1.pdf" download>Projeto 1 (PDF)</a></li>
-        <li><a href="/entregas/site-final.zip" download>Site Final (ZIP)</a></li>
-    </ul>
+    <!-- Configurações -->
+    <section class="card">
+      <h2>Configurações</h2>
+      <button class="btn-config" onclick="alert('Em breve!')">Editar Perfil</button>
     </section>
 
-    <section>
-        <h2>Configurações</h2>
-        <button onclick="alert('Em breve!')">Editar Perfil</button>
-    </section>
+  </div>
 
-  
-
-  <script src="dashboard.js"></script>
+  <script>
+    function logout() {
+      localStorage.removeItem("usuarioEmail");
+      window.location.href = "/Sistema-Cadastro-Login/login-cadastro.html";
+    }
+  </script>
 </body>
 </html>
