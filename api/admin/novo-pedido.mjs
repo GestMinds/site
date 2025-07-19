@@ -7,13 +7,32 @@ const supabase = createClient(
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Método não permitido' });
+    res.statusCode = 405;
+    res.end(JSON.stringify({ message: 'Método não permitido' }));
+    return;
   }
 
-  const { email, titulo, valor, status } = req.body;
+  // Vercel Serverless não suporta req.json(), usamos chunks
+  let body = '';
+  for await (const chunk of req) {
+    body += chunk;
+  }
+
+  let parsed;
+  try {
+    parsed = JSON.parse(body);
+  } catch (err) {
+    res.statusCode = 400;
+    res.end(JSON.stringify({ message: 'JSON inválido' }));
+    return;
+  }
+
+  const { email, titulo, valor, status } = parsed;
 
   if (!email || !titulo || !valor) {
-    return res.status(400).json({ message: 'Dados incompletos' });
+    res.statusCode = 400;
+    res.end(JSON.stringify({ message: 'Dados incompletos' }));
+    return;
   }
 
   const { error } = await supabase.from('pedidos').insert([
@@ -22,8 +41,12 @@ export default async function handler(req, res) {
 
   if (error) {
     console.error('Erro Supabase:', error);
-    return res.status(500).json({ message: 'Erro ao salvar no banco' });
+    res.statusCode = 500;
+    res.end(JSON.stringify({ message: 'Erro ao salvar no banco' }));
+    return;
   }
 
-  res.status(200).json({ message: 'Pedido salvo com sucesso' });
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'application/json');
+  res.end(JSON.stringify({ message: 'Pedido salvo com sucesso' }));
 }
