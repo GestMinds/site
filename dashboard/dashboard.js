@@ -1,11 +1,10 @@
-// dashboard.js
 window.onload = async () => {
   const email = localStorage.getItem("usuarioEmail");
   if (!email) {
     alert("Usuário não logado");
-    window.location.href = "login-cadastro.html";
+    window.location.href = "../Sistema-Cadastro-Login/login-cadastro.html";
     return;
- }
+  }
 
   const res = await fetch("/api/dados-cliente?email=" + encodeURIComponent(email));
   const data = await res.json();
@@ -15,34 +14,68 @@ window.onload = async () => {
     return;
   }
 
+  // Nome e status
   document.getElementById("cliente-nome").innerText = data.nome;
-  document.getElementById("status-projeto").innerText = data.status_projeto || "Não informado";
+  document.getElementById("status-projeto").innerText = data.status_projeto || "Em análise";
 
+  // Progresso
   const progresso = data.progresso || 0;
   const barra = document.getElementById("progresso");
   barra.style.width = `${progresso}%`;
   barra.innerText = `${progresso}%`;
 
+  // Gráfico com Chart.js
+  const grafico = new Chart(document.getElementById("graficoProgresso"), {
+    type: 'doughnut',
+    data: {
+      labels: ['Concluído', 'Restante'],
+      datasets: [{
+        data: [progresso, 100 - progresso],
+        backgroundColor: ['#dd2476', '#e0e0e0'],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      cutout: '70%',
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: true }
+      }
+    }
+  });
+
+  // Histórico
   const historico = document.getElementById("historico-pedidos");
   data.historico.forEach(pedido => {
     const li = document.createElement("li");
-    li.innerText = `${pedido.data} - ${pedido.titulo} - R$${pedido.valor}`;
+    li.innerHTML = `${pedido.data} - <strong>${pedido.titulo}</strong> - R$${pedido.valor.toFixed(2)} <button class="ver-btn" data-detalhes="${pedido.detalhes}">Ver</button>`;
     historico.appendChild(li);
   });
+
+  // Modal de detalhes
+  document.querySelectorAll(".ver-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.getElementById("pedido-detalhes").innerText = btn.dataset.detalhes;
+      document.getElementById("pedido-modal").classList.remove("hidden");
+    });
+  });
+
+  document.querySelector(".close-modal").addEventListener("click", () => {
+    document.getElementById("pedido-modal").classList.add("hidden");
+  });
+
+  // Arquivos
+  const arquivos = document.getElementById("lista-arquivos");
+  arquivos.innerHTML = "";
+  (data.arquivos || []).forEach((file, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="${file.url}" target="_blank">📎 Arquivo ${i + 1}</a>`;
+    arquivos.appendChild(li);
+  });
+
+  // Logout
+  document.getElementById("logout-btn").addEventListener("click", () => {
+    localStorage.removeItem("usuarioEmail");
+    window.location.href = "../Sistema-Cadastro-Login/login-cadastro.html";
+  });
 };
-
-<button onclick="logout()">Sair</button>
-function logout() {
-  localStorage.removeItem("usuarioEmail");
-  window.location.href = "/Sistema-Cadastro-Login/login-cadastro.html";
-}
-const notificacoes = document.getElementById("notificacoes");
-notificacoes.innerText = "Seu projeto entrou na fase de revisão!";
-
-  function abrirModalDetalhes() {
-    document.getElementById("modal-detalhes").classList.remove("hidden");
-}
-
-  function fecharModalDetalhes() {
-    document.getElementById("modal-detalhes").classList.add("hidden");
-}

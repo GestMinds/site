@@ -2,96 +2,59 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Área do Cliente - GestMinds</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard do Cliente</title>
   <link rel="stylesheet" href="dashboard.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class="dashboard-wrapper">
 
-    <!-- Notificações -->
-    <div class="notificacoes" id="notificacoes">
-      🔔 Bem-vindo! Aqui você acompanha tudo sobre seu projeto.
-    </div>
+  <header class="header">
+    <h1>Bem-vindo, <span id="cliente-nome">Cliente</span></h1>
+    <button id="logout-btn">Sair</button>
+  </header>
 
-    <!-- Topo com nome e logout -->
-    <header class="top-bar">
-      <h1>Olá, <span id="cliente-nome">Cliente</span> 👋</h1>
-      <button onclick="logout()" class="btn-logout">Sair</button>
-    </header>
-
-    <!-- Status do Projeto -->
-    <section class="card">
+  <main class="container">
+    <section class="card status">
       <h2>Status do Projeto</h2>
-      <p id="status-projeto">Em produção</p>
+      <p id="status-projeto">Carregando...</p>
     </section>
 
-    <!-- Progresso -->
-    <section class="card">
-      <h2>Progresso</h2>
-      <div class="barra-progresso">
-        <div id="progresso" class="progresso-preenchido">60%</div>
+    <section class="card progresso">
+      <h2>Progresso da Entrega</h2>
+      <div class="progress-bar">
+        <div id="progresso" class="progress-fill">0%</div>
       </div>
+      <canvas id="graficoProgresso" height="200"></canvas>
     </section>
 
-    <!-- Histórico de pedidos -->
-    <section class="card">
+    <section class="card historico">
       <h2>Histórico de Pedidos</h2>
-      <ul id="historico-pedidos" class="lista-historico">
-        <li><strong>20/06/2025</strong> - Projeto Logo - R$300</li>
-        <li><strong>05/07/2025</strong> - Site Institucional - R$1500</li>
+      <ul id="historico-pedidos"></ul>
+    </section>
+
+    <section class="card arquivos">
+      <h2>Arquivos Recebidos</h2>
+      <ul id="lista-arquivos">
+        <li>Nenhum arquivo disponível ainda.</li>
       </ul>
     </section>
 
-    <!-- Arquivos -->
-    <section class="card">
-      <h2>Arquivos Entregues</h2>
-      <ul class="lista-downloads">
-        <li><a href="#">Logo_Final.pdf</a></li>
-        <li><a href="#">Website_v1.zip</a></li>
-      </ul>
-    </section>
-
-    <!-- Suporte -->
     <section class="card suporte">
       <h2>Precisa de ajuda?</h2>
-      <a href="https://wa.me/55SEUNUMERO" target="_blank">
-        <button class="whatsapp-btn">Falar com Suporte no WhatsApp</button>
-      </a>
+      <a href="https://wa.me/5500000000000" target="_blank" class="whatsapp-btn">Falar com Suporte</a>
     </section>
+  </main>
 
-    <!-- Configurações -->
-    <section class="card">
-      <h2>Configurações</h2>
-      <button class="btn-config" onclick="alert('Em breve!')">Editar Perfil</button>
-    </section>
-
-    <!-- Botão de detalhes -->
-    <button class="btn-detalhes" onclick="abrirModalDetalhes()">
-    Ver detalhes do pedido
-    </button>
-
-    <!-- Modal de Detalhes -->
-    <div id="modal-detalhes" class="modal-overlay hidden">
+  <!-- Modal de Detalhes -->
+  <div id="pedido-modal" class="modal hidden">
     <div class="modal-content">
-        <span class="modal-close" onclick="fecharModalDetalhes()">×</span>
-        <h2>Detalhes do Pedido</h2>
-        <p><strong>Projeto:</strong> Criação de Identidade Visual</p>
-        <p><strong>Descrição:</strong> Design de logo, paleta de cores e manual de marca.</p>
-        <p><strong>Status:</strong> Em produção</p>
-        <p><strong>Prazo estimado:</strong> 25 de Julho de 2025</p>
-        <p><strong>Responsável:</strong> Equipe de Design</p>
-        <!-- Aqui você pode depois preencher dinamicamente com JS -->
+      <span class="close-modal">&times;</span>
+      <h3>Detalhes do Pedido</h3>
+      <div id="pedido-detalhes">Carregando...</div>
     </div>
-    </div>
-
-
   </div>
 
-  <script>
-    function logout() {
-      localStorage.removeItem("usuarioEmail");
-      window.location.href = "/Sistema-Cadastro-Login/login-cadastro.html";
-    }
-  </script>
+  <script src="dashboard.js"></script>
 </body>
 </html>
