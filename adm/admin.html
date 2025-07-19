@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Painel Admin</title>
+  <link rel="stylesheet" href="admin.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+
+  <header class="header">
+    <h1><i class="fa-solid fa-user-shield"></i> Painel Administrativo</h1>
+    <button id="logout-btn">Sair</button>
+  </header>
+
+  <main class="container">
+
+    <section class="card">
+      <h2><i class="fa-solid fa-users"></i> Total de Usuários</h2>
+      <p id="total-usuarios">Carregando...</p>
+    </section>
+
+    <section class="card">
+      <h2><i class="fa-solid fa-clock-rotate-left"></i> Últimos Acessos</h2>
+      <ul id="lista-acessos"></ul>
+    </section>
+
+    <section class="card">
+      <h2><i class="fa-solid fa-box-open"></i> Pedidos Abertos</h2>
+      <ul id="pedidos-abertos"></ul>
+    </section>
+
+    <section class="card">
+      <h2><i class="fa-solid fa-person-chalkboard"></i> Gerenciar Clientes</h2>
+      <div id="clientes-container">Carregando...</div>
+    </section>
+
+    <section class="card">
+      <h2><i class="fa-solid fa-folder-open"></i> Arquivos Enviados</h2>
+      <ul id="lista-arquivos"></ul>
+    </section>
+
+  </main>
+
+  <script src="admin.js"></script>
+</body>
+</html>

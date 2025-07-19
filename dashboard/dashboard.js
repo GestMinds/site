@@ -79,3 +79,14 @@ window.onload = async () => {
     window.location.href = "../Sistema-Cadastro-Login/login-cadastro.html";
   });
 };
+
+const email = localStorage.getItem("usuarioEmail");
+
+const admins = [
+  "empresarialvitorbr@outlook.com",
+  "ph0984596@gmail.com"
+];
+
+if (admins.includes(email)) {
+  window.location.href = "/adm/admin.html";
+}
