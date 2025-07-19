@@ -48,3 +48,8 @@ export default async function handler(req, res) {
     nome: usuario.nome || "", // se você tiver esse campo
   });
 }
+
+await supabase.from('acessos').insert([
+  { usuario: email }
+]);
+

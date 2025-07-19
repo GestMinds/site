@@ -1,8 +1,17 @@
-export default function handler(req, res) {
-  const acessosFalsos = [
-    { usuario: "empresarialvitorbr@outlook.com", data: new Date() },
-    { usuario: "ph0984596@gmail.com", data: new Date(Date.now() - 3600000) },
-  ];
+import { createClient } from '@supabase/supabase-js';
 
-  res.status(200).json(acessosFalsos);
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_KEY
+);
+
+export default async function handler(req, res) {
+  const { data, error } = await supabase
+    .from('acessos')
+    .select('*')
+    .order('data', { ascending: false })
+    .limit(10);
+
+  if (error) return res.status(500).json({ erro: error.message });
+  res.status(200).json(data);
 }
