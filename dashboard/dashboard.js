@@ -6,7 +6,8 @@ window.onload = async () => {
     return;
   }
 
-  const res = await fetch("/api/dados-cliente?email=" + encodeURIComponent(email));
+  const res = await fetch("/api/cliente?email=" + encodeURIComponent(email));
+
   const data = await res.json();
 
   console.log("👉 PEDIDOS BRUTOS:", data.pedidos); // << ADICIONE ISSO
