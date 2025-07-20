@@ -41,10 +41,22 @@ window.onload = async () => {
     const pedidosAbertos = document.getElementById("pedidos-abertos");
     pedidosAbertos.innerHTML = "";
     pedidos.forEach(pedido => {
-      const li = document.createElement("li");
-      li.innerHTML = `<strong>${pedido.titulo}</strong> - ${pedido.status} - R$${pedido.valor.toFixed(2)}`;
-      pedidosAbertos.appendChild(li);
-    });
+    
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <strong>${pedido.titulo}</strong><br>
+      Cliente: ${pedido.email}<br>
+      Valor: R$ ${pedido.valor.toFixed(2)}<br>
+      Status:
+      <select class="status-select" data-id="${pedido.id}">
+        <option value="pendente" ${pedido.status === "pendente" ? "selected" : ""}>Pendente</option>
+        <option value="em produção" ${pedido.status === "em produção" ? "selected" : ""}>Em produção</option>
+        <option value="concluído" ${pedido.status === "concluído" ? "selected" : ""}>Concluído</option>
+      </select>
+    `;
+    pedidosAbertos.appendChild(li);
+  });
+
 
     // Mostrar arquivos enviados
     const listaArquivos = document.getElementById("lista-arquivos");
