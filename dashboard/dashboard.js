@@ -9,6 +9,8 @@ window.onload = async () => {
   const res = await fetch("/api/dados-cliente?email=" + encodeURIComponent(email));
   const data = await res.json();
 
+  console.log("👉 PEDIDOS BRUTOS:", data.pedidos); // << ADICIONE ISSO
+
   if (!res.ok) {
     alert("Erro ao carregar dados do cliente.");
     return;
