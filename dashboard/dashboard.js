@@ -6,7 +6,7 @@ window.onload = async () => {
     return;
   }
 
-  const res = await fetch("/api/cliente?email=" + encodeURIComponent(email));
+  const res = await fetch("/api/admin/cliente?email=" + encodeURIComponent(email));
 
   const data = await res.json();
 
