@@ -5,6 +5,20 @@ const supabase = createClient(
   process.env.SUPABASE_KEY
 );
 
+console.log("🔍 Buscando pedidos para:", email);
+
+  // Pega todos os pedidos desse cliente
+  const { data: pedidos, error: pedidosErro } = await supabase
+    .from("pedidos")
+    .select("*")
+    .eq("email", email);
+
+  console.log("📦 Pedidos encontrados:", pedidos);
+  if (pedidosErro) {
+    console.error("❌ Erro ao buscar pedidos:", pedidosErro);
+  }
+
+
 module.exports = async function handler(req, res) {
   const email = req.query.email;
 
