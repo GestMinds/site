@@ -16,28 +16,44 @@ window.onload = async () => {
 
     if (!res.ok) throw new Error(data.erro || "Erro ao buscar cliente");
 
-    const info = document.getElementById("info-cliente");
-    info.innerHTML = `
-      <h2>${data.nome}</h2>
-      <p><strong>Email:</strong> ${data.email}</p>
-      <p><strong>Telefone:</strong> ${data.telefone || "N/A"}</p>
-      <p><strong>Empresa:</strong> ${data.empresa || "N/A"}</p>
-      <p><strong>Status do Projeto:</strong> ${data.status_projeto || "N/A"}</p>
-      <p><strong>Progresso:</strong> ${data.progresso || 0}%</p>
-      <p><strong>Total em Compras:</strong> R$ ${data.total_gasto?.toFixed(2) || "0.00"}</p>
+      const info = document.getElementById("info-cliente");
+      info.innerHTML = `
+        <h2>${data.nome}</h2>
+        <p><strong>Email:</strong> ${data.email}</p>
+        <p><strong>Telefone:</strong> ${data.telefone || "N/A"}</p>
+        <p><strong>Empresa:</strong> ${data.empresa || "N/A"}</p>
+        <p><strong>Status do Projeto:</strong> ${data.status_projeto || "N/A"}</p>
+        <p><strong>Progresso:</strong> ${data.progresso || 0}%</p>
+        <p><strong>Total em Compras:</strong> R$ ${data.total_gasto?.toFixed(2) || "0.00"}</p>
+      `;
+
+      const historico = document.getElementById("historico-cliente");
+      historico.innerHTML = "<h2>Histórico</h2>";
+
+      if (data.pedidos && data.pedidos.length > 0) {
+        
+        data.pedidos.forEach(pedido => {
+    const li = document.createElement("li");
+
+    li.innerHTML = `
+      ${new Date(pedido.created_at).toLocaleString()} - 
+      <strong>${pedido.titulo}</strong> - 
+      R$${pedido.valor.toFixed(2)}<br>
+      Status: <strong>${pedido.status}</strong><br>
+      
+      <label for="status-${pedido.id}">Atualizar status:</label>
+      <select id="status-${pedido.id}">
+        <option value="aberto" ${pedido.status === "aberto" ? "selected" : ""}>Aberto</option>
+        <option value="em andamento" ${pedido.status === "em andamento" ? "selected" : ""}>Em andamento</option>
+        <option value="concluído" ${pedido.status === "concluído" ? "selected" : ""}>Concluído</option>
+      </select>
+      <button onclick="atualizarStatusPedido('${pedido.id}')">Salvar</button>
+      <hr>
     `;
 
-    const historico = document.getElementById("historico-cliente");
-    historico.innerHTML = "<h2>Histórico</h2>";
+    historico.appendChild(li);
+  });
 
-    if (data.pedidos && data.pedidos.length > 0) {
-      data.pedidos.forEach(pedido => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-          <p><strong>${pedido.titulo}</strong> - ${pedido.status} - R$${pedido.valor.toFixed(2)}</p>
-        `;
-        historico.appendChild(div);
-      });
     } else {
       historico.innerHTML += "<p>Sem pedidos registrados.</p>";
     }
@@ -76,5 +92,29 @@ async function adicionarPedido() {
 
   } catch (err) {
     alert("Erro: " + err.message);
+  }
+}
+
+async function atualizarStatusPedido(id) {
+  const novoStatus = document.getElementById(`status-${id}`).value;
+
+  try {
+    const res = await fetch("/api/admin/atualizar-status", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, status: novoStatus })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Status atualizado!");
+      window.location.reload();
+    } else {
+      alert("Erro: " + data.message);
+    }
+
+  } catch (err) {
+    alert("Erro ao atualizar status: " + err.message);
   }
 }

@@ -1,4 +1,4 @@
-import { supabase } from "../../utils/supabaseClient"; // ajuste o path conforme seu projeto
+import { supabase } from "@/lib/supabaseClient";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   const { id, status } = req.body;
 
   if (!id || !status) {
-    return res.status(400).json({ message: "Dados incompletos" });
+    return res.status(400).json({ message: "ID e status são obrigatórios" });
   }
 
   const { error } = await supabase
@@ -17,8 +17,8 @@ export default async function handler(req, res) {
     .eq("id", id);
 
   if (error) {
-    return res.status(500).json({ message: "Erro ao atualizar", error });
+    return res.status(500).json({ message: "Erro ao atualizar status", error });
   }
 
-  return res.status(200).json({ message: "Status atualizado com sucesso" });
+  return res.status(200).json({ message: "Status atualizado com sucesso!" });
 }
