@@ -1,19 +1,24 @@
-// /api/admin/pedidos-abertos.js
-
-import { createClient } from "@supabase/supabase-js";
-
-const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
+import { supabase } from "../../utils/supabaseClient"; // ajuste o path conforme seu projeto
 
 export default async function handler(req, res) {
-  const { data, error } = await supabase
-    .from("pedidos")
-    .select("*")
-    .not("status", "eq", "concluído")
-    .order("created_at", { ascending: false });
-
-  if (error) {
-    return res.status(500).json({ erro: "Erro ao buscar pedidos abertos." });
+  if (req.method !== "POST") {
+    return res.status(405).json({ message: "Método não permitido" });
   }
 
-  res.status(200).json(data);
+  const { id, status } = req.body;
+
+  if (!id || !status) {
+    return res.status(400).json({ message: "Dados incompletos" });
+  }
+
+  const { error } = await supabase
+    .from("pedidos")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) {
+    return res.status(500).json({ message: "Erro ao atualizar", error });
+  }
+
+  return res.status(200).json({ message: "Status atualizado com sucesso" });
 }

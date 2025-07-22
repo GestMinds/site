@@ -41,21 +41,22 @@ window.onload = async () => {
     const pedidosAbertos = document.getElementById("pedidos-abertos");
     pedidosAbertos.innerHTML = "";
     pedidos.forEach(pedido => {
-    
-    const li = document.createElement("li");
-    li.innerHTML = `
-      <strong>${pedido.titulo}</strong><br>
-      Cliente: ${pedido.email}<br>
-      Valor: R$ ${pedido.valor.toFixed(2)}<br>
-      Status:
-      <select class="status-select" data-id="${pedido.id}">
-        <option value="pendente" ${pedido.status === "pendente" ? "selected" : ""}>Pendente</option>
-        <option value="em produção" ${pedido.status === "em produção" ? "selected" : ""}>Em produção</option>
-        <option value="concluído" ${pedido.status === "concluído" ? "selected" : ""}>Concluído</option>
-      </select>
-    `;
-    pedidosAbertos.appendChild(li);
-  });
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>${pedido.titulo}</strong><br>
+        Status atual: <strong>${pedido.status}</strong><br>
+        Valor: R$${pedido.valor.toFixed(2)}<br>
+        
+        <label for="status-${pedido.id}">Atualizar status:</label>
+        <select id="status-${pedido.id}">
+          <option value="aberto" ${pedido.status === "aberto" ? "selected" : ""}>Aberto</option>
+          <option value="em andamento" ${pedido.status === "em andamento" ? "selected" : ""}>Em andamento</option>
+          <option value="concluído" ${pedido.status === "concluído" ? "selected" : ""}>Concluído</option>
+        </select>
+        <button onclick="atualizarStatusPedido('${pedido.id}')">Salvar</button>
+      `;
+      pedidosAbertos.appendChild(li);
+    });
 
 
     // Mostrar arquivos enviados
@@ -97,3 +98,29 @@ window.onload = async () => {
     window.location.href = "/Sistema-Cadastro-Login/login-cadastro.html";
   });
 };
+
+async function atualizarStatusPedido(id) {
+  const novoStatus = document.getElementById(`status-${id}`).value;
+
+  try {
+    const res = await fetch("/api/admin/atualizar-status", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id, status: novoStatus })
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("Status atualizado com sucesso!");
+      window.location.reload(); // Recarrega para refletir o novo status
+    } else {
+      alert("Erro ao atualizar: " + data.message);
+    }
+  } catch (error) {
+    alert("Erro ao atualizar status: " + error.message);
+  }
+}
+

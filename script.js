@@ -1,24 +1,31 @@
-// Efeito digitando no subtítulo
-const texto = "Landing pages e sites personalizados para pequenos negócios que querem crescer online.";
-const subtitulo = document.getElementById('subtitulo');
+// ==================== EFEITO DIGITANDO NO SUBTÍTULO ====================
+
+// Criar dinamicamente o subtítulo no topo do .hero-content
+const textoDigitado =
+  "Landing pages e sites personalizados para pequenos negócios que querem crescer online.";
+const heroContent = document.querySelector(".hero-content");
+
+// Cria e adiciona o subtítulo dinamicamente
+const subtitulo = document.createElement("h2");
+subtitulo.id = "subtitulo";
+heroContent.appendChild(subtitulo);
+
 let index = 0;
 let apagando = false;
 
 function digitar() {
-  if (!apagando && index < texto.length) {
-    subtitulo.innerHTML += texto[index];
+  if (!apagando && index < textoDigitado.length) {
+    subtitulo.innerHTML += textoDigitado[index];
     index++;
     setTimeout(digitar, 90);
-  } else if (!apagando && index === texto.length) {
-    // Espera um pouco antes de começar a apagar
+  } else if (!apagando && index === textoDigitado.length) {
     apagando = true;
     setTimeout(digitar, 1500);
   } else if (apagando && index > 0) {
-    subtitulo.innerHTML = texto.substring(0, index - 1);
+    subtitulo.innerHTML = textoDigitado.substring(0, index - 1);
     index--;
-    setTimeout(digitar, 30); // apagar mais rápido
+    setTimeout(digitar, 30);
   } else {
-    // Reinicia a digitação
     apagando = false;
     setTimeout(digitar, 500);
   }
@@ -26,24 +33,41 @@ function digitar() {
 
 digitar();
 
+// ==================== MENU RESPONSIVO (opcional) ====================
 
-// Abrir modal de contato
-const modal = document.getElementById("contatoModal");
-const btns = document.querySelectorAll(".cta, .bota-querer-site button");
-const fechar = document.querySelector(".fechar");
+const menuIcon = document.getElementById("menuIcon");
+const navLinks = document.getElementById("navLinks");
 
-btns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    modal.style.display = "block";
-  });
+menuIcon.addEventListener("click", () => {
+  navLinks.classList.toggle("ativo");
 });
 
-fechar.addEventListener("click", () => {
-  modal.style.display = "none";
-});
+// ==================== MODAL DE CONTATO (caso adicione depois) ====================
 
-window.addEventListener("click", e => {
-  if (e.target === modal) {
-    modal.style.display = "none";
-  }
+// Exemplo de estrutura funcional (sem HTML do modal por enquanto):
+// const modal = document.getElementById("contatoModal");
+// const btns = document.querySelectorAll(".cta, .bota-querer-site button");
+// const fechar = document.querySelector(".fechar");
+
+// btns.forEach(btn => {
+//   btn.addEventListener("click", () => {
+//     modal.style.display = "block";
+//   });
+// });
+
+// fechar.addEventListener("click", () => {
+//   modal.style.display = "none";
+// });
+
+// window.addEventListener("click", (e) => {
+//   if (e.target === modal) {
+//     modal.style.display = "none";
+//   }
+// });
+
+// ==================== LOADER ====================
+
+window.addEventListener("load", () => {
+  document.querySelector(".overlay").style.display = "none";
+  document.querySelector(".loader").style.display = "none";
 });
