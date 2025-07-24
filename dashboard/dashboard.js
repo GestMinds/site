@@ -131,3 +131,48 @@ const admins = ["empresarialvitorbr@outlook.com", "ph0984596@gmail.com"];
 if (admins.includes(email)) {
   window.location.href = "/adm/admin.html";
 }
+
+window.onload = async () => {
+  try {
+    const res = await fetch('/api/admin/pedidos-todos'); // endpoint que retorna todos os pedidos
+    const data = await res.json();
+
+    if (!res.ok) throw new Error(data.erro || "Erro ao buscar pedidos");
+
+    const totalPedidos = data.length;
+    const concluido = data.filter(p => p.status === "concluído").length;
+    const emAndamento = data.filter(p => p.status === "em andamento").length;
+    const pendente = data.filter(p => p.status === "pendente" || p.status === "aberto").length;
+
+    const porcentagemConcluido = Math.round((concluido / totalPedidos) * 100);
+
+    // Atualiza a barra de progresso
+    const barra = document.getElementById("progresso");
+    barra.style.width = `${porcentagemConcluido}%`;
+    barra.textContent = `${porcentagemConcluido}%`;
+
+    // Gera gráfico de pizza
+    const ctx = document.getElementById("graficoProgresso").getContext("2d");
+    new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Concluído', 'Em Andamento', 'Pendente'],
+        datasets: [{
+          data: [concluido, emAndamento, pendente],
+          backgroundColor: ['#4CAF50', '#FFC107', '#F44336']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+  } catch (err) {
+    console.error("Erro ao carregar progresso:", err);
+  }
+};
