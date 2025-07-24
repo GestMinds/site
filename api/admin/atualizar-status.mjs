@@ -8,7 +8,7 @@ const supabase = createClient(
 export async function POST(req) {
   try {
     const body = await req.json();
-    const { id, status } = body;
+    const { id, status, progresso, detalhes } = body;
 
     if (!id || !status) {
       return new Response(JSON.stringify({ message: "ID e status são obrigatórios" }), {
@@ -17,9 +17,15 @@ export async function POST(req) {
       });
     }
 
+    const updateData = {
+      status,
+      ...(typeof progresso === "number" ? { progresso } : {}),
+      ...(typeof detalhes === "string" ? { detalhes } : {})
+    };
+
     const { error } = await supabase
       .from("pedidos")
-      .update({ status })
+      .update(updateData)
       .eq("id", id);
 
     if (error) {
@@ -30,7 +36,7 @@ export async function POST(req) {
       });
     }
 
-    return new Response(JSON.stringify({ message: "Status atualizado com sucesso" }), {
+    return new Response(JSON.stringify({ message: "Pedido atualizado com sucesso" }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
