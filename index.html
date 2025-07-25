@@ -1,135 +1,221 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>GestMinds</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" type="image/png" href="img/logo empresa.png">
-  
-</head>
-<body>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="GestMinds - Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
+    <meta name="keywords" content="sites profissionais, landing pages, desenvolvimento web, presença digital, GestMinds" />
+    <meta name="author" content="GestMinds" />
+    
+    <title>GestMinds - Sites Profissionais e Landing Pages</title>
+    
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="script.js"></script>
+    
+    <!-- Google Fonts Modernizadas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/logo-empresa-menor.png" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="GestMinds - Sites Profissionais e Landing Pages" />
+    <meta property="og:description" content="Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
+    <meta property="og:image" content="img/logo empresa.png" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="GestMinds - Sites Profissionais e Landing Pages" />
+    <meta property="twitter:description" content="Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
+  </head>
 
-  <!-- Modal de Contato -->
-  <div id="contatoModal" class="modal">
-    <div class="modal-content">
-      <span class="fechar">&times;</span>
-      <h2>Fale com a GestMinds 🚀</h2>
-      <p>Siga no Instagram: <strong><a href="https://www.instagram.com/gestminds.dev" target="_blank" style="color: #2A78DA; text-decoration: none;">@gestminds.dev</a></strong></p>
-      <div class="botoes-contato">
-        <a href="https://wa.me/5513997840794?text=Oi%2C%20Amorim!%20Estou%20interessado%20em%20criar%20um%20site%20com%20vocês%20🚀" target="_blank">
-          💬 WhatsApp Amorim
+  <body>
+    <!-- Fallback para JavaScript desabilitado -->
+    <noscript>
+      <div style="background: #ff512f; color: white; padding: 1rem; text-align: center; position: fixed; top: 0; width: 100%; z-index: 9999;">
+        Para uma melhor experiência, por favor habilite o JavaScript em seu navegador.
+      </div>
+    </noscript>
+
+    <!-- MENU HAMBÚRGUER MODERNO -->
+    <header class="navbar" role="banner">
+      <!-- LOGO -->
+      <div class="logo-container">
+        <a href="#inicio" class="logo-link" aria-label="Ir para o início - Logo GestMinds">
+          <img
+            src="img/logo empresa.png"
+            alt="Logo GestMinds"
+            class="logo-image"
+          />
         </a>
-        <a href="https://wa.me/5587981454634?text=Oi%2C%20VIT1NH00!%20Vi%20seus%20serviços%20e%20quero%20saber%20mais%20sobre%20sites%20🚀" target="_blank">
-          💬 WhatsApp VIT1NH00
-        </a>
+      </div>
+
+      <!-- Menu Hambúrguer -->
+      <button class="hamburger-menu" id="hamburgerMenu" aria-label="Abrir menu de navegação" aria-expanded="false">
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+        <span class="hamburger-line"></span>
+      </button>
+
+      <!-- Navegação Principal -->
+      <nav class="nav-links" id="navLinks" role="navigation" aria-label="Menu principal">
+        <div class="nav-header">
+          <h3>Menu Principal</h3>
+          <button class="nav-close" id="navClose" aria-label="Fechar menu">×</button>
+        </div>
+        
+        <div class="nav-section">
+          <h4>Navegação</h4>
+          <a href="#inicio" aria-label="Ir para o início">🏠 Início</a>
+          <a href="#sobre" aria-label="Ir para sobre nós">👥 Sobre nós</a>
+          <a href="#servicos" aria-label="Ir para serviços">⚡ Serviços</a>
+          <a href="#footer" aria-label="Ir para contato">📞 Contato</a>
+        </div>
+
+        <div class="nav-section">
+          <h4>Área do Cliente</h4>
+          <a href="Sistema-Cadastro-Login/login-cadastro.html" aria-label="Acessar área de login">🔐 Login</a>
+          <a href="dashboard/dashboard.html" aria-label="Acessar dashboard">📊 Dashboard</a>
+        </div>
+
+        <div class="nav-section">
+          <h4>Administração</h4>
+          <a href="adm/admin.html" aria-label="Área administrativa">⚙️ Admin</a>
+          <a href="adm/cliente.html" aria-label="Gerenciar clientes">👤 Clientes</a>
+        </div>
+
+        <div class="nav-footer">
+          <div class="nav-social">
+            <a href="https://www.instagram.com/gestminds.dev" target="_blank" aria-label="Instagram">📱 Instagram</a>
+            <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn">💼 LinkedIn</a>
+          </div>
+          <p class="nav-brand">GestMinds © 2025</p>
+        </div>
+      </nav>
+
+      <!-- Overlay para fechar menu -->
+      <div class="nav-overlay" id="navOverlay"></div>
+    </header>
+
+    <main role="main">
+      
+      <!-- Seção Hero -->
+      <section class="hero" id="inicio" aria-label="Seção principal">
+        <div class="hero-content">
+          <h1><span class="gradient-text">GESTMINDS</span></h1>
+
+          <!-- O subtítulo será inserido dinamicamente pelo JavaScript -->
+          <p>
+            Na GestMinds, somos especialistas em criar presença digital
+            poderosa.
+          </p>
+          <p>
+            Trabalhamos com o que realmente gera resultado: sites profissionais,
+            landing pages otimizadas e experiências digitais que convertem.
+            Nosso foco é ajudar empreendedores, empresas e criadores a se
+            destacarem de verdade no online — com identidade, performance e
+            impacto.
+          </p>
+        </div>
+      </section>
+
+      <!-- Seção Serviços -->
+      <section class="servicos" id="servicos">
+  <h2 class="titulo-servicos">Nossos Serviços</h2>
+  <div class="cards-servicos">
+    
+    <div class="card">
+      <img src="img/Landing-Page.jpg" alt="Landing Page Profissional" />
+      <div class="card-conteudo">
+        <h3>💻 Landing Page Profissional</h3>
+        <p>
+          Página única, bonita e rápida. Apresente seu negócio e gere contatos com formulário ou WhatsApp.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="img/Protifolio pessoal.jpg" alt="Portfólio Pessoal" />
+      <div class="card-conteudo">
+        <h3>👨‍💼 Site para portfólio pessoal</h3>
+        <p>
+          Ideal para freelancers e criativos. Mostre seus projetos, redes sociais e contato de forma elegante.
+        </p>
+      </div>
+    </div>
+
+    <div class="card">
+      <img src="img/criacao-de-site.png" alt="Site Completo" />
+      <div class="card-conteudo">
+        <h3>🖥️ Site Completo</h3>
+        <p>
+          Até 5 páginas (Home, Sobre, Serviços, Portfólio, Contato) com presença online forte e profissional.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+      <!-- Seção Por Que Escolher -->
+     <section class="porque-escolher" id="sobre">
+  <div class="porque-container">
+    <div class="texto-porque">
+      <h2>Por que escolher a <span class="destaque">GestMinds</span>?</h2>
+      <p>
+        A GestMinds nasceu da paixão por design limpo e funcional. Criamos sites com foco no resultado, sem enrolação, direto ao ponto.
+      </p>
+      <div class="linha-colorida"></div>
+    </div>
+
+    <div class="beneficios">
+      <div class="beneficio">
+        🧑‍💻 Atendimento direto com o desenvolvedor
+      </div>
+      <div class="beneficio">
+        📱 Site 100% responsivo
+      </div>
+      <div class="beneficio">
+        ⚡ Entrega rápida (até 5 dias úteis)
+      </div>
+      <div class="beneficio">
+        🔒 Seguro e otimizado
       </div>
     </div>
   </div>
-
-  <header class="topo">
-    <div class="gestminds">
-      <a href="#GestMinds">GestMinds</a>
-    </div>
-    <ul class="menu">
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#sobre">Sobre</a></li>
-    </ul>
-    <button class="cta">Solicite Já</button>
-  </header>
-
-  <a href="Sistema-Cadastro-Login/login-cadastro.html">
-    <button>Login / Cadastro</button>
-  </a>
+</section>
 
 
-  <main>
-    <div class="hero">
-      <section class="frase-1" id="titulo">
-        <h1>
-          Criação de sites que<br />
-          vendem do seu jeito, <br />
-          no seu tempo.
-        </h1>
-      </section>
+    <!-- Rodapé -->
+    <footer class="footer" id="footer" aria-label="Rodapé GestMinds">
+  <div class="footer-container">
 
-      <section class="sub-frase1" id="subtitulo">
-        <!-- Efeito digitando vai aqui -->
-      </section>
-
-      <section class="bota-querer-site">
-        <button>Quero meu site</button>
-      </section>
-    </div>
-  </main> ]
-
-  <section class="servicos" id="servicos">
-    <div class="servico">
-      <img src="img/Landing-Page.jpg" alt="Landing Page Profissional" />
-      <h3>💻 Landing Page Profissional</h3>
-      <p>Uma página única, bonita e rápida, feita pra apresentar seu negócio e gerar contatos pelo WhatsApp ou formulário.</p>
-    </div>
-    <div class="servico">
-      <img src="img/Protifolio pessoal.jpg" alt="Site para portfólio pessoal" />
-      <h3>🧑‍💼 Site para portfólio pessoal</h3>
-      <p>Ideal para freelancers, criativos e profissionais. Mostre seus projetos, redes sociais e contato de forma elegante e fácil de atualizar.</p>
-    </div>
-    <div class="servico">
-      <img src="img/criacao-de-site.png" alt="Site Completo" />
-      <h3>🖥️ Site Completo</h3>
-      <p>Até 5 páginas (Home, Sobre, Serviços, Portfólio, Contato), com tudo que sua empresa precisa pra crescer online com presença forte e profissional.</p>
-    </div>
-  </section>
-  
- <section class="porque-escolher" id="sobre">
-    <div class="topo-porque">
-      <div class="lado-esquerdo">
-        <h2>Por que escolher a GestMinds?</h2>
-        <div class="linha-colorida"></div>
-      </div>
-      <div class="lado-direito">
-        <p>A GestMinds nasceu da paixão por design limpo e funcional. Criamos sites com foco no resultado, sem enrolação, direto ao ponto.</p>
+    <div class="footer-brand">
+      <h3>GestMinds</h3>
+      <div class="footer-social">
+        <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn GestMinds">LinkedIn</a>
+        <a href="https://www.instagram.com/gestminds.dev" target="_blank" aria-label="Instagram GestMinds">Instagram</a>
       </div>
     </div>
 
-    <div class="beneficios-grid">
-      <div class="beneficio">📦 Atendimento direto com o desenvolvedor</div>
-      <div class="beneficio">📱 Site 100% responsivo</div>
-      <div class="beneficio">🚀 Entrega rápida (até 5 dias úteis)</div>
-      <div class="beneficio">🔒 Seguro e otimizado</div>
+    <div class="footer-credits">
+      <h4>Créditos das imagens</h4>
+      <ul>
+        <li><a href="https://www.vinteplia.com.br/servicos/design-grafico/eu-vou-criar-sua-landing-page-23" target="_blank">vinteplia.com.br</a></li>
+        <li><a href="https://elements.envato.com/pt-br/davis-personal-portfolio-template-ADRWA4W" target="_blank">Envato Elements</a></li>
+        <li><a href="https://web41.com.br/criacao-de-site" target="_blank">web41.com.br</a></li>
+      </ul>
     </div>
 
-  </section>
-
-  <footer class="footer" id="footer" aria-label="Rodapé GestMinds">
-    <div class="footer-content">
-      <!-- Marca -->
-      <div class="footer-brand">
-        <h3>GestMinds</h3>
-        <div class="footer-social">
-          <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn GestMinds">in</a>
-          <a href="https://www.instagram.com/gestminds.dev" target="_blank" aria-label="Instagram GestMinds">IG</a>
-        </div>
-      </div>
-
-      <!-- Créditos -->
-      <div class="footer-credits">
-        <h4>Créditos das imagens</h4>
-        <ul>
-          <li><a href="https://www.vinteplia.com.br/servicos/design-grafico/eu-vou-criar-sua-landing-page-23" target="_blank" rel="noopener">vinteplia.com.br</a></li>
-          <li><a href="https://elements.envato.com/pt-br/davis-personal-portfolio-template-ADRWA4W" target="_blank" rel="noopener">Envato Elements</a></li>
-          <li><a href="https://web41.com.br/criacao-de-site" target="_blank" rel="noopener">web41.com.br</a></li>
-        </ul>
-      </div>
-
-      <!-- Nota -->
-      <div class="footer-note">
-        Site feito por VIT1NH00 e Pedro Amorim
-      </div>
+    <div class="footer-note">
+      <p>Site feito por <strong>VIT1NH00</strong> e <strong>Pedro Amorim</strong></p>
     </div>
-  </footer>
 
+  </div>
+</footer>
 
-  <script src="script.js"></script>
-</body>
+  </body>
 </html>

@@ -1,3 +1,6 @@
+
+console.log("🚀 dashboard.js carregado");
+
 window.onload = async () => {
   try {
     const res = await fetch('/api/admin/pedidos-todos');
@@ -47,3 +50,5 @@ window.onload = async () => {
     console.error("Erro ao carregar progresso:", err);
   }
 };
+
+console.log("📦 Dados recebidos:", pedidos);

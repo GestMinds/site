@@ -6,17 +6,17 @@ const supabase = createClient(
 );
 
 export async function GET() {
-  const { data, error } = await supabase.from("pedidos").select("*");
-
+  const { data, error } = await supabase.from('pedidos').select('*');
+  
   if (error) {
-    return new Response(JSON.stringify({ erro: "Erro ao buscar pedidos" }), {
+    return new Response(JSON.stringify({ erro: 'Erro ao buscar pedidos' }), {
       status: 500,
-      headers: { "Content-Type": "application/json" }
+      headers: { 'Content-Type': 'application/json' },
     });
   }
 
   return new Response(JSON.stringify(data), {
     status: 200,
-    headers: { "Content-Type": "application/json" }
+    headers: { 'Content-Type': 'application/json' },
   });
 }
