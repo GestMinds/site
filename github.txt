@@ -1,5 +1,5 @@
 git add .
-git commit -m "ultimos ajustes"
+git commit -m "Site Finalizado"
 git push -u origin main
 git branch -M main
 git push -u origin main
