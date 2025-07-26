@@ -1,5 +1,5 @@
 git add .
-git commit -m "Site Finalizado"
+git commit -m "Site no google"
 git push -u origin main
 git branch -M main
 git push -u origin main
