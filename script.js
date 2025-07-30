@@ -1,8 +1,8 @@
 // ==================== INICIALIZAÇÃO SEGURA DO DOM ====================
-document.addEventListener('DOMContentLoaded', () => {
-  
+document.addEventListener("DOMContentLoaded", () => {
   // ==================== EFEITO DIGITANDO NO SUBTÍTULO ====================
-  const textoDigitado = "Landing pages e sites personalizados para pequenos negócios que querem crescer online.";
+  const textoDigitado =
+    "Landing pages e sites personalizados para pequenos negócios que querem crescer online.";
   const heroContent = document.querySelector(".hero-content");
 
   if (heroContent) {
@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
       min-height: 1.6rem;
       opacity: 0.9;
     `;
-    
+
     // Insere o subtítulo após o h1
-    const h1 = heroContent.querySelector('h1');
+    const h1 = heroContent.querySelector("h1");
     if (h1) {
-      h1.insertAdjacentElement('afterend', subtitulo);
+      h1.insertAdjacentElement("afterend", subtitulo);
     } else {
       heroContent.appendChild(subtitulo);
     }
@@ -47,14 +47,14 @@ document.addEventListener('DOMContentLoaded', () => {
           setTimeout(digitar, 800);
         }
       } catch (error) {
-        console.error('Erro no efeito de digitação:', error);
+        console.error("Erro no efeito de digitação:", error);
       }
     }
 
     // Inicia o efeito após um pequeno delay
     setTimeout(digitar, 500);
   } else {
-    console.warn('Elemento .hero-content não encontrado');
+    console.warn("Elemento .hero-content não encontrado");
   }
 
   // ==================== MENU HAMBÚRGUER MODERNO ====================
@@ -104,75 +104,77 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Fecha o menu ao clicar em um link
-    const navLinksItems = navLinks.querySelectorAll('a');
-    navLinksItems.forEach(link => {
-      link.addEventListener('click', () => {
+    const navLinksItems = navLinks.querySelectorAll("a");
+    navLinksItems.forEach((link) => {
+      link.addEventListener("click", () => {
         closeMenu();
       });
     });
 
     // Fecha o menu com a tecla ESC
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && navLinks.classList.contains("show")) {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navLinks.classList.contains("show")) {
         closeMenu();
       }
     });
 
     // Fecha o menu ao redimensionar a tela
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       if (window.innerWidth > 768 && navLinks.classList.contains("show")) {
         closeMenu();
       }
     });
   } else {
-    console.warn('Elementos do menu hambúrguer não encontrados');
+    console.warn("Elementos do menu hambúrguer não encontrados");
   }
 
   // ==================== ANIMAÇÕES DE SCROLL ====================
   const observerOptions = {
     threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
+    rootMargin: "0px 0px -50px 0px",
   };
 
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
+    entries.forEach((entry) => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('fade-in');
+        entry.target.classList.add("fade-in");
       }
     });
   }, observerOptions);
 
   // Observa elementos para animação
-  const elementsToAnimate = document.querySelectorAll('.card, .beneficio, .titulo-servicos');
-  elementsToAnimate.forEach(el => {
+  const elementsToAnimate = document.querySelectorAll(
+    ".card, .beneficio, .titulo-servicos"
+  );
+  elementsToAnimate.forEach((el) => {
     observer.observe(el);
   });
 
   // ==================== EFEITOS HOVER AVANÇADOS ====================
-  const cards = document.querySelectorAll('.card');
-  cards.forEach(card => {
-    card.addEventListener('mouseenter', () => {
-      card.style.transform = 'translateY(-10px) scale(1.02)';
+  const cards = document.querySelectorAll(".card");
+  cards.forEach((card) => {
+    card.addEventListener("mouseenter", () => {
+      card.style.transform = "translateY(-10px) scale(1.02)";
     });
-    
-    card.addEventListener('mouseleave', () => {
-      card.style.transform = 'translateY(0) scale(1)';
+
+    card.addEventListener("mouseleave", () => {
+      card.style.transform = "translateY(0) scale(1)";
     });
   });
 
   // ==================== SCROLL SUAVE PARA LINKS INTERNOS ====================
   const internalLinks = document.querySelectorAll('a[href^="#"]');
-  internalLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
+  internalLinks.forEach((link) => {
+    link.addEventListener("click", (e) => {
       e.preventDefault();
-      const targetId = link.getAttribute('href').substring(1);
+      const targetId = link.getAttribute("href").substring(1);
       const targetElement = document.getElementById(targetId);
-      
+
       if (targetElement) {
         const offsetTop = targetElement.offsetTop - 80; // Compensa a navbar fixa
         window.scrollTo({
           top: offsetTop,
-          behavior: 'smooth'
+          behavior: "smooth",
         });
       }
     });
@@ -180,21 +182,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ==================== NAVBAR SCROLL EFFECT ====================
   let lastScrollTop = 0;
-  const navbar = document.querySelector('.navbar');
-  
+  const navbar = document.querySelector(".navbar");
+
   if (navbar) {
-    window.addEventListener('scroll', () => {
-      const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-      
-      // Adiciona/remove classe baseada no scroll
+    window.addEventListener("scroll", () => {
+      const scrollTop =
+        window.pageYOffset || document.documentElement.scrollTop;
+
+      // Mantém sempre o gradiente azul/roxo original
       if (scrollTop > 100) {
-        navbar.style.background = 'linear-gradient(135deg, rgba(255, 81, 47, 0.95), rgba(221, 36, 118, 0.95))';
-        navbar.style.backdropFilter = 'blur(15px)';
+        navbar.style.background =
+          "linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria))";
+        navbar.style.backdropFilter = "blur(15px)";
+        navbar.style.boxShadow = "0 4px 20px rgba(0, 0, 0, 0.3)";
       } else {
-        navbar.style.background = 'linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria))';
-        navbar.style.backdropFilter = 'blur(10px)';
+        navbar.style.background =
+          "linear-gradient(135deg, var(--cor-secundaria), var(--cor-primaria))";
+        navbar.style.backdropFilter = "blur(10px)";
+        navbar.style.boxShadow = "0 4px 12px rgba(0, 0, 0, 0.15)";
       }
-      
+
       lastScrollTop = scrollTop;
     });
   }
@@ -214,28 +221,30 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==================== LOADING ANIMATION ====================
-  const loadingElements = document.querySelectorAll('.hero-content, .card, .beneficio');
+  const loadingElements = document.querySelectorAll(
+    ".hero-content, .card, .beneficio"
+  );
   loadingElements.forEach((el, index) => {
-    el.style.opacity = '0';
-    el.style.transform = 'translateY(30px)';
-    
+    el.style.opacity = "0";
+    el.style.transform = "translateY(30px)";
+
     setTimeout(() => {
-      el.style.transition = 'all 0.6s ease';
-      el.style.opacity = '1';
-      el.style.transform = 'translateY(0)';
+      el.style.transition = "all 0.6s ease";
+      el.style.opacity = "1";
+      el.style.transform = "translateY(0)";
     }, index * 100);
   });
 
   // ==================== TRATAMENTO DE ERROS GLOBAL ====================
-  window.addEventListener('error', (e) => {
-    console.error('Erro JavaScript:', e.error);
+  window.addEventListener("error", (e) => {
+    console.error("Erro JavaScript:", e.error);
   });
 
   // ==================== FALLBACK PARA JAVASCRIPT DESABILITADO ====================
   // Adiciona classe no body para indicar que JS está funcionando
-  document.body.classList.add('js-enabled');
-  
-  console.log('🚀 Site GestMinds carregado com sucesso!');
+  document.body.classList.add("js-enabled");
+
+  console.log("🚀 Site GestMinds carregado com sucesso!");
 });
 
 // ==================== LOADER REMOVAL ====================
@@ -243,12 +252,12 @@ window.addEventListener("load", () => {
   // Remove elementos de loading se existirem
   const overlay = document.querySelector(".overlay");
   const loader = document.querySelector(".loader");
-  
+
   if (overlay) overlay.style.display = "none";
   if (loader) loader.style.display = "none";
-  
+
   // Adiciona classe para indicar que a página foi totalmente carregada
-  document.body.classList.add('page-loaded');
+  document.body.classList.add("page-loaded");
 });
 
 // ==================== UTILITÁRIOS GLOBAIS ====================
@@ -258,7 +267,7 @@ window.smoothScrollTo = (element, offset = 80) => {
     const elementPosition = element.offsetTop - offset;
     window.scrollTo({
       top: elementPosition,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   }
 };
