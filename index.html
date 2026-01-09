@@ -1,214 +1,174 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="GestMinds - Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
-    <meta name="keywords" content="sites profissionais, landing pages, desenvolvimento web, presença digital, GestMinds" />
-    <meta name="author" content="GestMinds" />
-    <meta name="google-site-verification" content="B_vWGJe6Uh--XHhQMbw12XK9PDhCcN07tiIWOQA7I4U" />
-    <meta name="description" content="Criação de sites, landing pages e portfólios modernos. Soluções web personalizadas para empresas e profissionais. Comece com a GestMinds.">
-    
-    <title>GestMinds - Sites Profissionais e Landing Pages</title>
-    
-    <link rel="stylesheet" href="style.css" />
-    <script defer src="script.js"></script>
-    
-    <!-- Google Fonts Modernizadas -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;800;900&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="img/logo empresa.png" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:title" content="GestMinds - Sites Profissionais e Landing Pages" />
-    <meta property="og:description" content="Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
-    <meta property="og:image" content="img/logo empresa.png" />
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:title" content="GestMinds - Sites Profissionais e Landing Pages" />
-    <meta property="twitter:description" content="Especialistas em criar presença digital poderosa. Sites profissionais, landing pages otimizadas e experiências digitais que convertem." />
-  </head>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | IA & Inovação Digital</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/png" href="logo GestMinds.png"/>
 
-  <body>
-    <!-- Fallback para JavaScript desabilitado -->
-    <noscript>
-      <div style="background: #ff512f; color: white; padding: 1rem; text-align: center; position: fixed; top: 0; width: 100%; z-index: 9999;">
-        Para uma melhor experiência, por favor habilite o JavaScript em seu navegador.
-      </div>
-    </noscript>
+</head>
+<body>
 
-    <!-- MENU HAMBÚRGUER MODERNO -->
-    <header class="navbar" role="banner">
-      <!-- LOGO -->
-      <div class="logo-container">
-        <a href="#inicio" class="logo-link" aria-label="Ir para o início - Logo GestMinds">
-          <img
-            src="img/logo empresa.png"
-            alt="Logo GestMinds"
-            class="logo-image"
-          />
-        </a>
-      </div>
-
-      <!-- Menu Hambúrguer -->
-      <button class="hamburger-menu" id="hamburgerMenu" aria-label="Abrir menu de navegação" aria-expanded="false">
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-        <span class="hamburger-line"></span>
-      </button>
-
-      <!-- Navegação Principal -->
-      <nav class="nav-links" id="navLinks" role="navigation" aria-label="Menu principal">
-        <div class="nav-header">
-          <h3>Menu Principal</h3>
-          <button class="nav-close" id="navClose" aria-label="Fechar menu">×</button>
-        </div>
-        
-        <div class="nav-section">
-          <h4>Navegação</h4>
-          <a href="#inicio" aria-label="Ir para o início">🏠 Início</a>
-          <a href="#sobre" aria-label="Ir para sobre nós">👥 Sobre nós</a>
-          <a href="#servicos" aria-label="Ir para serviços">⚡ Serviços</a>
-          <a href="#footer" aria-label="Ir para contato">📞 Contato</a>
+    <!-- HERO -->
+    <section class="hero-section">
+        <div class="animated-bg">
+            <div class="blob"></div>
+            <div class="blob purple"></div>
+            <div class="blob blue"></div>
         </div>
 
-        <div class="nav-section">
-          <h4>Área do Cliente</h4>
-          <a href="Sistema-Cadastro-Login/login-cadastro.html" aria-label="Acessar área de login">🔐 Login</a>
-          <a href="dashboard/dashboard.html" aria-label="Acessar dashboard">📊 Dashboard</a>
-        </div>
-
-        <div class="nav-section">
-          <h4>Administração</h4>
-          <a href="adm/admin.html" aria-label="Área administrativa">⚙️ Admin</a>
-          <a href="adm/cliente.html" aria-label="Gerenciar clientes">👤 Clientes</a>
-        </div>
-
-        <div class="nav-footer">
-          <div class="nav-social">
-            <a href="https://www.instagram.com/gestminds.dev" target="_blank" aria-label="Instagram">📱 Instagram</a>
-            <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn">💼 LinkedIn</a>
-          </div>
-          <p class="nav-brand">GestMinds © 2025</p>
-        </div>
-      </nav>
-
-      <!-- Overlay para fechar menu -->
-      <div class="nav-overlay" id="navOverlay"></div>
-    </header>
-
-    <main role="main">
-      
-      <!-- Seção Hero -->
-      <section class="hero" id="inicio" aria-label="Seção principal">
         <div class="hero-content">
-          <h1><span class="gradient-text">GESTMINDS</span></h1>
-
-          <!-- O subtítulo será inserido dinamicamente pelo JavaScript -->
-          <p>
-            Na GestMinds, somos especialistas em criar presença digital
-            poderosa.
-          </p>
-          <p>
-            Trabalhamos com o que realmente gera resultado: sites profissionais,
-            landing pages otimizadas e experiências digitais que convertem.
-            Nosso foco é ajudar empreendedores, empresas e criadores a se
-            destacarem de verdade no online com identidade, performance e
-            impacto.
-          </p>
+            <h1>GestMinds</h1>
+            <p class="subtitle">
+                Inteligência Artificial · Automação & Sistemas · Web & Conversão · Mobile
+            </p>
         </div>
-      </section>
+    </section>
 
-      <!-- Seção Serviços -->
-      <section class="servicos" id="servicos">
-  <h2 class="titulo-servicos">Nossos Serviços</h2>
-    <div class="cards-servicos">
-    
-    <div class="card card-neumorphism glow-effect hover-lift">
-      <img src="img/lading page profissonal.png" alt="Landing Page Profissional" />
-      <div class="card-conteudo">
-        <h3>💻 Landing Page Profissional</h3>
-        <p>
-          Página única, bonita e rápida. Apresente seu negócio e gere contatos com formulário ou WhatsApp.
-        </p>
-      </div>
-    </div>
+    <!-- SCROLL HORIZONTAL -->
+    <section class="horizontal-scroll-container">
+        <div class="expanding-strip"></div>
 
-    <div class="card card-neumorphism glow-effect hover-lift">
-      <img src="img/portifolio pessoal.png" alt="Portfólio Pessoal" />
-      <div class="card-conteudo">
-        <h3>👨‍💼 Site para portfólio pessoal</h3>
-        <p>
-          Ideal para freelancers e criativos. Mostre seus projetos, redes sociais e contato de forma elegante.
-        </p>
-      </div>
-    </div>
+        <div class="horizontal-wrapper">
 
-    <div class="card card-neumorphism glow-effect hover-lift">
-      <img src="img/Site completo.jpg" alt="Site Completo" />
-      <div class="card-conteudo">
-        <h3>🖥️ Site Completo</h3>
-        <p>
-          Até 5 páginas (Home, Sobre, Serviços, Portfólio, Contato) com presença online forte e profissional.
-        </p>
-      </div>
-    </div>
+            <div class="notebook-card ai">
+                <div class="notebook-screen">
+                    <div class="notebook-top-bar">
+                        <span class="camera"></span>
+                    </div>
+                    <h2>Inteligência Artificial</h2>
+                    <ul>
+                        <li>Agentes de IA</li>
+                        <li>IA personalizada</li>
+                        <li>Automações inteligentes</li>
+                    </ul>
+                </div>
+            </div>
 
-  </div>
-</section>
+            <div class="notebook-card automation">
+                <div class="notebook-screen">
+                    <div class="notebook-top-bar">
+                        <span class="camera"></span>
+                    </div>
+                    <h2>Automação & Sistemas</h2>
+                    <ul>
+                        <li>Automação de processos</li>
+                        <li>SaaS sob medida</li>
+                        <li>Sistemas desktop</li>
+                    </ul>
+                </div>
+            </div>
 
-      <!-- Seção Por Que Escolher -->
-     <section class="porque-escolher" id="sobre">
-  <div class="porque-container">
-    <div class="texto-porque">
-      <h2>Por que escolher a <span class="destaque">GestMinds</span>?</h2>
-      <p>
-        A GestMinds nasceu da paixão por design limpo e funcional. Criamos sites com foco no resultado, sem enrolação, direto ao ponto.
-      </p>
-      <div class="linha-colorida"></div>
-    </div>
+            <div class="notebook-card web">
+                <div class="notebook-screen">
+                    <div class="notebook-top-bar">
+                        <span class="camera"></span>
+                    </div>
+                    <h2>Web & Conversão</h2>
+                    <ul>
+                        <li>Sites institucionais</li>
+                        <li>Landing pages</li>
+                        <li>Aplicações web</li>
+                    </ul>
+                </div>
+            </div>
 
-    <div class="beneficios">
-      <div class="beneficio">
-        🧑‍💻 Atendimento direto com o desenvolvedor
-      </div>
-      <div class="beneficio">
-        📱 Site 100% responsivo
-      </div>
-      <div class="beneficio">
-        ⚡ Entrega rápida (até 5 dias úteis)
-      </div>
-      <div class="beneficio">
-        🔒 Seguro e otimizado
-      </div>
-    </div>
-  </div>
-</section>
+            <div class="notebook-card mobile">
+                <div class="notebook-screen">
+                    <div class="notebook-top-bar">
+                        <span class="camera"></span>
+                    </div>
+                    <h2>Mobile</h2>
+                    <ul>
+                        <li>Apps Android</li>
+                        <li>Apps iOS</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section class="about-section">
+        <div class="about-container">
+
+            <div class="about-header">
+                <h2>Por que escolher a GestMinds?</h2>
+                <p>
+                    Desenvolvemos soluções digitais modernas, seguras e focadas em resultado.
+                    Tecnologia aplicada de forma inteligente para escalar negócios.
+                </p>
+            </div>
+
+            <div class="about-cards">
+                <div class="about-card">
+                    <span class="icon">⚡</span>
+                    <h3>Atendimento direto</h3>
+                    <p>Contato direto com o desenvolvedor, sem intermediários.</p>
+                </div>
+
+                <div class="about-card">
+                    <span class="icon">🕒</span>
+                    <h3>Suporte 24/7</h3>
+                    <p>Monitoramento e suporte contínuo para seus sistemas.</p>
+                </div>
+
+                <div class="about-card">
+                    <span class="icon">🚀</span>
+                    <h3>Entrega rápida</h3>
+                    <p>Processos ágeis e foco em performance desde o início.</p>
+                </div>
+
+                <div class="about-card">
+                    <span class="icon">🔒</span>
+                    <h3>Seguro & otimizado</h3>
+                    <p>Código limpo, seguro e preparado para escalar.</p>
+                </div>
+            </div>
+
+        </div>
+    </section>
 
 
-    <!-- Rodapé -->
-    <footer class="footer" id="footer" aria-label="Rodapé GestMinds">
-  <div class="footer-container">
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="footer-container">
 
-    <div class="footer-brand">
-      <h3>GestMinds</h3>
-      <div class="footer-social">
-        <a href="https://www.linkedin.com" target="_blank" aria-label="LinkedIn GestMinds">LinkedIn</a>
-        <a href="https://www.instagram.com/gestminds.dev" target="_blank" aria-label="Instagram GestMinds">Instagram</a>
-      </div>
-    </div>
+            <div class="footer-brand">
+                <h3>GestMinds</h3>
+                <p>
+                    Soluções digitais inteligentes para empresas que querem escalar
+                    com tecnologia, performance e segurança.
+                </p>
+            </div>
 
-    <div class="footer-note">
-      <div>Site feito por <strong> GESTMINDS </strong></div>
-    </div>
+        <div class="footer-contacts">
+            <h4>Contato</h4>
 
-  </div>
-</footer>
+            <a href="https://wa.me/5541999001252?text=Ol%C3%A1%20Jo%C3%A3o%2C%20tudo%20bem%3F%20Conheci%20a%20GestMinds%20e%20gostaria%20de%20saber%20mais%20sobre%20como%20voc%C3%AAs%20podem%20ajudar%20no%20meu%20projeto."
+            target="_blank">
+                João Augusto <span>(41) 9 9900-1252</span>
+            </a>
 
-  </body>
+            <a href="https://wa.me/5587981454634?text=Olá%20Vitor%2C%20tudo%20bem%3F%20👋%20Conheci%20a%20GestMinds%20e%20gostaria%20de%20saber%20mais%20sobre%20como%20vocês%20podem%20ajudar%20no%20meu%20projeto."
+            target="_blank">
+                Vitor Gabriel <span>(87) 98145-4634</span>
+            </a>
+
+            <a href="https://wa.me/5511946755569?text=Olá%20Andreia%2C%20tudo%20bem%3F%20👋%20Conheci%20a%20GestMinds%20e%20gostaria%20de%20saber%20mais%20sobre%20como%20vocês%20podem%20ajudar%20no%20meu%20projeto."
+            target="_blank">
+                Andreia <span>(11) 9 9467-5569</span>
+            </a>
+        </div>
+
+        <div class="footer-bottom">
+            <p>© 2026 GestMinds · CNPJ 64.362.670/0001-30</p>
+        </div>
+    </footer>
+
+
+    <script src="js/main.js"></script>
+</body>
 </html>
