@@ -76,6 +76,23 @@ body {
     left: 10%;
 }
 
+.btn-client {
+    display: inline-block;
+    margin-top: 40px;
+    padding: 14px 28px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #fff;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-client:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+}
+
 @keyframes float {
     from { transform: translate(-40px,-40px); }
     to { transform: translate(60px,60px); }
