@@ -1,37 +1,91 @@
 <!DOCTYPE html>
-
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>GestMinds | Login</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-```
-<!-- CSS do App -->
-<link rel="stylesheet" href="/assets/css/app.css">
-```
-
+    <title>GestMinds | Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="assets/css/app.css">
+    <script src="assets/js/auth.js"></script>
 </head>
-<body class="app-bg">
+<body class="bg-gray-50 h-screen flex overflow-hidden">
 
-```
-<!-- CONTAINER LOGIN -->
-<div class="login-container">
-    <h1 class="logo">GestMinds</h1>
-    <p class="subtitle">Acesse sua conta</p>
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
+            Gest<span class="text-blue-500">Minds</span>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-900/20">
+                <span class="w-2 h-2 rounded-full bg-white"></span>
+                Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Vendas
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Clientes
+            </a>
+        </nav>
 
-    <form class="login-form">
-        <input type="email" placeholder="E-mail" required>
-        <input type="password" placeholder="Senha" required>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full flex items-center justify-center gap-2 p-3 text-sm font-medium text-gray-400 hover:text-red-400 transition hover:bg-red-500/10 rounded-lg">
+                Sair do Sistema
+            </button>
+        </div>
+    </aside>
 
-        <button type="submit">Entrar</button>
-    </form>
+    <main class="flex-1 flex flex-col overflow-hidden">
+        
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0">
+            <div class="flex items-center gap-4 text-sm text-gray-500">
+                <span>Bem-vindo de volta,</span>
+                <span id="user-display-name" class="font-bold text-slate-800">...</span>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <div class="text-right hidden sm:block">
+                    <p class="text-xs text-gray-400 uppercase font-bold">Plano Pro</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
+                    G
+                </div>
+            </div>
+        </header>
 
-    <span class="hint">
-        © 2026 GestMinds
-    </span>
-</div>
-```
+        <section class="flex-1 overflow-y-auto p-6 md:p-8">
+            
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-slate-800">Visão Geral</h1>
+                <p class="text-gray-500">Acompanhe o desempenho da sua empresa em tempo real.</p>
+            </div>
 
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <p class="text-sm text-gray-400 font-medium uppercase">Vendas Hoje</p>
+                    <h3 class="text-2xl font-bold text-slate-800 mt-1">R$ 1.250,00</h3>
+                    <span class="text-xs text-green-500 font-bold">↑ 12% vs ontem</span>
+                </div>
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
+                    <p class="text-sm text-gray-400 font-medium uppercase">Novos Clientes</p>
+                    <h3 class="text-2xl font-bold text-slate-800 mt-1">14</h3>
+                    <span class="text-xs text-blue-500 font-bold">Novos cadastros</span>
+                </div>
+                </div>
+
+            <div class="mt-8 bg-white rounded-xl border border-gray-100 shadow-sm h-64 flex items-center justify-center text-gray-300 italic">
+                Espaço reservado para gráficos ou tabelas de vendas recentes.
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        // Preenche o nome do usuário vindo do localStorage
+        const userData = JSON.parse(localStorage.getItem('@GestMinds:user'));
+        if (userData) {
+            document.getElementById('user-display-name').innerText = userData.email.split('@')[0];
+        }
+    </script>
 </body>
 </html>
