@@ -86,6 +86,25 @@
         if (userData) {
             document.getElementById('user-display-name').innerText = userData.email.split('@')[0];
         }
+        
+
+            document.addEventListener('DOMContentLoaded', () => {
+        const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
+        
+        if (user) {
+            // 1. Exibe o nome e o plano no Topbar
+            document.getElementById('user-display-name').innerText = user.name;
+            document.getElementById('plan-badge').innerText = `Plano ${user.plan}`;
+
+            // 2. Lógica de Bloqueio por Plano (Exemplo de escalabilidade)
+            if (user.plan === 'Basic') {
+                // Esconde recursos avançados ou mostra botão de "Upgrade"
+                const advancedFeatures = document.querySelectorAll('.premium-feature');
+                advancedFeatures.forEach(el => el.classList.add('opacity-50', 'pointer-events-none'));
+            }
+        }
+    });
+    
     </script>
 </body>
 </html>

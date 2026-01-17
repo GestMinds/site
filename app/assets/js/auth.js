@@ -1,22 +1,22 @@
-// Simulação de autenticação GestMinds (MVP DIA 1)
+
 const Auth = {
-    login(email, password) {
-        // Mock simples para o MVP
+    // Simulando o que a API devolverá após a integração Kiwify
+    async login(email, password) {
+        // No futuro: const response = await fetch('api/login', { method: 'POST', body: ... });
+        
         if (email === "admin@gestminds.com.br" && password === "123456") {
             const userData = {
-                name: "Usuário GestMinds",
+                name: "João Silva",
                 email: email,
-                role: "admin",
-                token: "session_active_mock"
+                plan: "Pro", // Identificado automaticamente (Basic, Pro ou Enterprise)
+                status: "active",
+                token: "jwt_gerado_pela_nossa_futura_api"
             };
-
+            
             localStorage.setItem('@GestMinds:user', JSON.stringify(userData));
-
-            // Redireciona para o dashboard
-            window.location.href = "/index.html";
+            window.location.href = 'index.html';
             return true;
         }
-
         return false;
     },
 
