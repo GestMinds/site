@@ -61,19 +61,34 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/auth.js"></script>
+
     <script>
-        // Captura o envio do formulário
-        document.getElementById('login-form').addEventListener('submit', function(e) {
-            e.preventDefault();
+        // Garante que o DOM está pronto
+        document.addEventListener('DOMContentLoaded', () => {
+            const loginForm = document.getElementById('login-form');
             
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
+            if (loginForm) {
+                loginForm.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    
+                    const email = document.getElementById('email').value;
+                    const password = document.getElementById('password').value;
 
-            // Chama a lógica do auth.js
-            const success = Auth.login(email, password);
+                    // Exibe um feedback visual (opcional)
+                    const btn = e.target.querySelector('button');
+                    const originalText = btn.innerText;
+                    btn.innerText = "Autenticando...";
+                    btn.disabled = true;
 
-            if (!success) {
-                alert("Credenciais inválidas! (Use: admin@gestminds.com.br / 123456)");
+                    // Chama a lógica do auth.js (que agora é async!)
+                    const success = await Auth.login(email, password);
+
+                    if (!success) {
+                        btn.innerText = originalText;
+                        btn.disabled = false;
+                        // O alerta de erro já está dentro do Auth.login, mas você pode reforçar aqui
+                    }
+                });
             }
         });
     </script>
