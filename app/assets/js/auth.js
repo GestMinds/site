@@ -1,18 +1,22 @@
+// assets/js/auth.js
+
 const SUPABASE_URL = 'https://dduistcgwxuiciyqeidd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
 
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Aqui está o segredo: Usamos window.supabase para acessar a biblioteca da CDN
+// e guardamos a instância em uma variável com nome diferente (_supabase)
+const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const Auth = {
     async login(email, password) {
         try {
-            // Consulta no Supabase se existe usuário com esse e-mail e senha
-            const { data, error } = await supabase
+            // Usamos a variável _supabase que criamos acima
+            const { data, error } = await _supabase
                 .from('profiles')
                 .select('*')
                 .eq('email', email)
                 .eq('password', password)
-                .eq('status', 'active') // Só deixa logar se o status for ativo
+                .eq('status', 'active')
                 .single();
 
             if (error || !data) {
@@ -21,13 +25,12 @@ const Auth = {
                 return false;
             }
 
-            // Se encontrou o usuário, salva os dados reais vindos do banco (Kiwify)
             const userData = {
                 name: data.full_name,
                 email: data.email,
                 plan: data.plan_type, 
                 status: data.status,
-                token: 'session_active_' + btoa(data.email) // Mock de token simples
+                token: 'session_active_' + btoa(data.email)
             };
             
             localStorage.setItem('@GestMinds:user', JSON.stringify(userData));
@@ -53,18 +56,15 @@ const Auth = {
     checkAccess() {
         const user = localStorage.getItem('@GestMinds:user');
         const path = window.location.pathname;
-        const isLoginPage = path.includes('login.html') || path === '/login';
+        const isLoginPage = path.includes('login.html') || path.endsWith('/') || path === '';
 
-        // Se não houver usuário e não estiver na página de login, redireciona
         if (!user && !isLoginPage) {
             window.location.href = 'login.html';
-        } 
-        // Se já estiver logado e tentar entrar no login, manda para o index
-        else if (user && isLoginPage) {
+        } else if (user && isLoginPage) {
             window.location.href = 'index.html';
         }
     }
 };
 
-// Executa a proteção de rota imediatamente
+// Executa a proteção de rota
 Auth.checkAccess();
