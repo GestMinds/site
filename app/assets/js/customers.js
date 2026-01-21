@@ -1,84 +1,117 @@
 // assets/js/customers.js
-const SUPABASE_URL = 'https://dduistcgwxuiciyqeidd.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g'; // Use a mesma que você já tem
-const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+/**
+ * NOTA: As variáveis SUPABASE_URL e SUPABASE_ANON_KEY NÃO devem ser declaradas aqui
+ * pois já foram declaradas no seu arquivo auth.js. 
+ * O navegador compartilha essas variáveis entre todos os scripts da página.
+ */
+
+// Inicializamos o cliente apenas se ele ainda não estiver disponível globalmente
+if (typeof _supabase === 'undefined') {
+    var _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+}
 
 const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
 
-// Abrir/Fechar Modal
+// Função para abrir e fechar o modal (agora vai funcionar!)
 function toggleModal(show) {
-    document.getElementById('modal-cliente').classList.toggle('hidden', !show);
+    const modal = document.getElementById('modal-cliente');
+    if (modal) {
+        modal.classList.toggle('hidden', !show);
+    }
 }
 
-// Carregar Clientes ao abrir a página
-document.addEventListener('DOMContentLoaded', listarClientes);
+// Garante que o script rode após o HTML carregar
+document.addEventListener('DOMContentLoaded', () => {
+    listarClientes();
+
+    // Vincula o evento de submit ao formulário
+    const form = document.getElementById('form-cliente');
+    if (form) {
+        form.addEventListener('submit', salvarCliente);
+    }
+});
 
 async function listarClientes() {
     const tbody = document.getElementById('lista-clientes');
-    
-    const { data, error } = await _supabase
-        .from('customers')
-        .select('*')
-        .eq('owner_email', user.email)
-        .eq('type', 'cliente')
-        .order('created_at', { ascending: false });
+    if (!tbody) return;
 
-    if (error) {
-        console.error(error);
-        return;
+    try {
+        const { data, error } = await _supabase
+            .from('customers')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('type', 'cliente')
+            .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!data || data.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-gray-400 italic">Nenhum cliente encontrado.</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = data.map(cli => `
+            <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                <td class="px-6 py-4 font-medium text-slate-800">${cli.name}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">${cli.email || '-'} <br> <span class="text-xs text-gray-400">${cli.phone || ''}</span></td>
+                <td class="px-6 py-4 text-sm text-gray-600">${cli.document || '-'}</td>
+                <td class="px-6 py-4">
+                    <button onclick="deletarCliente('${cli.id}')" class="text-red-400 hover:text-red-600 text-sm">Excluir</button>
+                </td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        console.error("Erro ao listar:", err.message);
     }
-
-    if (data.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="4" class="p-10 text-center text-gray-400 italic">Nenhum cliente encontrado.</td></tr>`;
-        return;
-    }
-
-    tbody.innerHTML = data.map(cli => `
-        <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
-            <td class="px-6 py-4 font-medium text-slate-800">${cli.name}</td>
-            <td class="px-6 py-4 text-sm text-gray-500">${cli.email || '-'} <br> <span class="text-xs text-gray-400">${cli.phone || ''}</span></td>
-            <td class="px-6 py-4 text-sm text-gray-600">${cli.document || '-'}</td>
-            <td class="px-6 py-4">
-                <button onclick="deletarCliente('${cli.id}')" class="text-red-400 hover:text-red-600 text-sm">Excluir</button>
-            </td>
-        </tr>
-    `).join('');
 }
 
-// Salvar Cliente
-document.getElementById('form-cliente').addEventListener('submit', async (e) => {
+async function salvarCliente(e) {
     e.preventDefault();
     const btn = document.getElementById('btn-salvar');
     btn.innerText = 'Salvando...';
     btn.disabled = true;
 
-    const novoCliente = {
-        owner_email: user.email,
-        type: 'cliente',
-        name: document.getElementById('c-nome').value,
-        email: document.getElementById('c-email').value,
-        phone: document.getElementById('c-tel').value,
-        document: document.getElementById('c-doc').value
-    };
+    try {
+        const novoCliente = {
+            user_id: user.id, 
+            owner_email: user.email,
+            type: 'cliente',
+            name: document.getElementById('c-nome').value,
+            email: document.getElementById('c-email').value,
+            phone: document.getElementById('c-tel').value,
+            document: document.getElementById('c-doc').value
+        };
 
-    const { error } = await _supabase.from('customers').insert([novoCliente]);
+        const { error } = await _supabase.from('customers').insert([novoCliente]);
 
-    if (error) {
-        alert("Erro ao salvar: " + error.message);
-    } else {
+        if (error) throw error;
+
         document.getElementById('form-cliente').reset();
         toggleModal(false);
-        listarClientes(); // Atualiza a lista
-    }
-    
-    btn.innerText = 'Salvar Cliente';
-    btn.disabled = false;
-});
+        await listarClientes(); 
 
-// Função para deletar (Opcional, mas útil)
+    } catch (err) {
+        alert("Erro ao salvar: " + err.message);
+    } finally {
+        btn.innerText = 'Salvar Cliente';
+        btn.disabled = false;
+    }
+}
+
 async function deletarCliente(id) {
     if (confirm("Deseja realmente excluir este cliente?")) {
-        await _supabase.from('customers').delete().eq('id', id);
-        listarClientes();
+        try {
+            const { error } = await _supabase
+                .from('customers')
+                .delete()
+                .eq('id', id)
+                .eq('user_id', user.id); 
+
+            if (error) throw error;
+            await listarClientes();
+        } catch (err) {
+            alert("Erro ao deletar: " + err.message);
+        }
     }
 }

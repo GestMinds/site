@@ -3,14 +3,11 @@
 const SUPABASE_URL = 'https://dduistcgwxuiciyqeidd.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
 
-// Aqui está o segredo: Usamos window.supabase para acessar a biblioteca da CDN
-// e guardamos a instância em uma variável com nome diferente (_supabase)
 const _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const Auth = {
     async login(email, password) {
         try {
-            // Usamos a variável _supabase que criamos acima
             const { data, error } = await _supabase
                 .from('profiles')
                 .select('*')
@@ -25,7 +22,9 @@ const Auth = {
                 return false;
             }
 
+            // AJUSTE AQUI: Incluindo o ID para o Multi-tenant funcionar
             const userData = {
+                id: data.id, // O UUID da tabela profiles
                 name: data.full_name,
                 email: data.email,
                 plan: data.plan_type, 
@@ -57,19 +56,13 @@ const Auth = {
         const user = localStorage.getItem('@GestMinds:user');
         const path = window.location.pathname;
         
-        // Verifica se o usuário está na página de login ou na raiz
-        const isLoginPage = path.includes('login.html') || path === '/' || path.endsWith('/index.html') === false && path.includes('.html') === false;
+        // Impede loop de redirecionamento
+        const isLoginPage = path.includes('login.html');
 
-        if (!user) {
-            // Se NÃO tem usuário e NÃO está na login.html, FORÇA ir para o login
-            if (!path.includes('login.html')) {
-                window.location.href = 'login.html';
-            }
-        } else {
-            // Se JÁ TEM usuário e tenta entrar na login, manda para o dashboard
-            if (path.includes('login.html')) {
-                window.location.href = 'index.html';
-            }
+        if (!user && !isLoginPage) {
+            window.location.href = 'login.html';
+        } else if (user && isLoginPage) {
+            window.location.href = 'index.html';
         }
     }
 };
