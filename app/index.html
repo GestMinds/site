@@ -5,9 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GestMinds | Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="assets/css/app.css">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/auth.js"></script>
+    <script>
+        if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }
+    </script>
 </head>
 <body class="bg-gray-50 h-screen flex overflow-hidden">
 
@@ -17,15 +19,14 @@
         </div>
         
         <nav class="flex-1 p-4 space-y-2 mt-4">
-            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg shadow-blue-900/20">
-                <span class="w-2 h-2 rounded-full bg-white"></span>
-                Dashboard
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
             </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
-                Vendas
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Clientes
+            </a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Fornecedores
             </a>
         </nav>
 
@@ -39,17 +40,17 @@
     <main class="flex-1 flex flex-col overflow-hidden">
         
         <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8 shrink-0">
-            <div class="flex items-center gap-4 text-sm text-gray-500">
-                <span>Bem-vindo de volta,</span>
-                <span id="user-display-name" class="font-bold text-slate-800">...</span>
+            <div class="flex items-center gap-2 text-sm text-gray-500">
+                <span>Bem-vindo,</span>
+                <span id="user-display-name" class="font-bold text-slate-800">Carregando...</span>
             </div>
             
             <div class="flex items-center gap-3">
                 <div class="text-right hidden sm:block">
-                    <p class="text-xs text-gray-400 uppercase font-bold">Plano Pro</p>
+                    <p id="plan-badge" class="text-xs text-blue-600 uppercase font-bold bg-blue-50 px-2 py-1 rounded">Plano...</p>
                 </div>
-                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white font-bold shadow-md">
-                    G
+                <div id="user-initial" class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-white font-bold">
+                    ?
                 </div>
             </div>
         </header>
@@ -58,54 +59,39 @@
             
             <div class="mb-8">
                 <h1 class="text-2xl font-bold text-slate-800">Visão Geral</h1>
-                <p class="text-gray-500">Acompanhe o desempenho da sua empresa em tempo real.</p>
+                <p class="text-gray-500">Dados reais da sua conta.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <p class="text-sm text-gray-400 font-medium uppercase">Vendas Hoje</p>
-                    <h3 class="text-2xl font-bold text-slate-800 mt-1">R$ 1.250,00</h3>
-                    <span class="text-xs text-green-500 font-bold">↑ 12% vs ontem</span>
-                </div>
-                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
-                    <p class="text-sm text-gray-400 font-medium uppercase">Novos Clientes</p>
-                    <h3 class="text-2xl font-bold text-slate-800 mt-1">14</h3>
-                    <span class="text-xs text-blue-500 font-bold">Novos cadastros</span>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:border-blue-200 transition">
+                    <p class="text-sm text-gray-400 font-medium uppercase">Total de Clientes</p>
+                    <h3 id="count-clientes" class="text-3xl font-bold text-slate-800 mt-1">...</h3>
+                    <a href="clientes.html" class="text-xs text-blue-500 font-bold hover:underline">Ver todos →</a>
                 </div>
 
-            <div class="mt-8 bg-white rounded-xl border border-gray-100 shadow-sm h-64 flex items-center justify-center text-gray-300 italic">
-                Espaço reservado para gráficos ou tabelas de vendas recentes.
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm hover:border-blue-200 transition">
+                    <p class="text-sm text-gray-400 font-medium uppercase">Total de Fornecedores</p>
+                    <h3 id="count-fornecedores" class="text-3xl font-bold text-slate-800 mt-1">...</h3>
+                    <a href="fornecedores.html" class="text-xs text-blue-500 font-bold hover:underline">Ver todos →</a>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl border border-gray-100 shadow-sm bg-gradient-to-br from-slate-50 to-white">
+                    <p class="text-sm text-gray-400 font-medium uppercase">Status da Conta</p>
+                    <h3 class="text-lg font-bold text-green-600 mt-1">Ativa</h3>
+                    <span class="text-xs text-gray-400">Sincronizado com Kiwify</span>
+                </div>
+            </div>
+
+            <div class="mt-8 bg-white p-12 rounded-xl border border-dashed border-gray-300 flex flex-col items-center justify-center text-gray-400">
+                <p class="italic">Em breve: Gráficos de crescimento e fluxo de caixa.</p>
+                <button onclick="window.location.href='clientes.html'" class="mt-4 bg-slate-800 text-white px-6 py-2 rounded-lg text-sm hover:bg-slate-700 transition">
+                    Cadastrar meu primeiro cliente
+                </button>
             </div>
 
         </section>
     </main>
 
-    <script>
-        // Preenche o nome do usuário vindo do localStorage
-        const userData = JSON.parse(localStorage.getItem('@GestMinds:user'));
-        if (userData) {
-            document.getElementById('user-display-name').innerText = userData.email.split('@')[0];
-        }
-        
-
-            document.addEventListener('DOMContentLoaded', () => {
-        const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
-        
-        if (user) {
-            // 1. Exibe o nome e o plano no Topbar
-            document.getElementById('user-display-name').innerText = user.name;
-            document.getElementById('plan-badge').innerText = `Plano ${user.plan}`;
-
-            // 2. Lógica de Bloqueio por Plano (Exemplo de escalabilidade)
-            if (user.plan === 'Basic') {
-                // Esconde recursos avançados ou mostra botão de "Upgrade"
-                const advancedFeatures = document.querySelectorAll('.premium-feature');
-                advancedFeatures.forEach(el => el.classList.add('opacity-50', 'pointer-events-none'));
-            }
-        }
-    });
-    
-    </script>
+    <script src="assets/js/dashboard.js"></script>
 </body>
 </html>
