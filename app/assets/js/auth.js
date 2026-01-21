@@ -56,12 +56,20 @@ const Auth = {
     checkAccess() {
         const user = localStorage.getItem('@GestMinds:user');
         const path = window.location.pathname;
-        const isLoginPage = path.includes('login.html') || path.endsWith('/') || path === '';
+        
+        // Verifica se o usuário está na página de login ou na raiz
+        const isLoginPage = path.includes('login.html') || path === '/' || path.endsWith('/index.html') === false && path.includes('.html') === false;
 
-        if (!user && !isLoginPage) {
-            window.location.href = 'login.html';
-        } else if (user && isLoginPage) {
-            window.location.href = 'index.html';
+        if (!user) {
+            // Se NÃO tem usuário e NÃO está na login.html, FORÇA ir para o login
+            if (!path.includes('login.html')) {
+                window.location.href = 'login.html';
+            }
+        } else {
+            // Se JÁ TEM usuário e tenta entrar na login, manda para o dashboard
+            if (path.includes('login.html')) {
+                window.location.href = 'index.html';
+            }
         }
     }
 };
