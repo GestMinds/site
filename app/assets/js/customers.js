@@ -1,31 +1,33 @@
 // assets/js/customers.js
 
 /**
- * NOTA: As variáveis SUPABASE_URL e SUPABASE_ANON_KEY NÃO devem ser declaradas aqui
- * pois já foram declaradas no seu arquivo auth.js. 
- * O navegador compartilha essas variáveis entre todos os scripts da página.
+ * NÃO declaramos SUPABASE_URL, SUPABASE_ANON_KEY ou _supabase aqui.
+ * O arquivo auth.js já os declarou globalmente no navegador.
  */
 
-// Inicializamos o cliente apenas se ele ainda não estiver disponível globalmente
-if (typeof _supabase === 'undefined') {
-    var _supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-}
-
+// Apenas pegamos o usuário do localStorage
 const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
 
-// Função para abrir e fechar o modal (agora vai funcionar!)
+// Função para abrir e fechar o modal (agora o navegador vai encontrar ela!)
 function toggleModal(show) {
     const modal = document.getElementById('modal-cliente');
     if (modal) {
         modal.classList.toggle('hidden', !show);
+    } else {
+        console.error("Elemento 'modal-cliente' não encontrado no HTML.");
     }
 }
 
 // Garante que o script rode após o HTML carregar
 document.addEventListener('DOMContentLoaded', () => {
+    // Verificamos se o banco de dados está disponível (criado pelo auth.js)
+    if (typeof _supabase === 'undefined') {
+        console.error("Erro: _supabase não foi definido pelo auth.js. Verifique a ordem dos scripts.");
+        return;
+    }
+
     listarClientes();
 
-    // Vincula o evento de submit ao formulário
     const form = document.getElementById('form-cliente');
     if (form) {
         form.addEventListener('submit', salvarCliente);
@@ -34,9 +36,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function listarClientes() {
     const tbody = document.getElementById('lista-clientes');
-    if (!tbody) return;
+    if (!tbody || !user) return;
 
     try {
+        // Usamos a variável _supabase global que já existe
         const { data, error } = await _supabase
             .from('customers')
             .select('*')
