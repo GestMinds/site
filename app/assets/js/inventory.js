@@ -1,19 +1,23 @@
 // assets/js/inventory.js
 
-// 1. Controle Global de Modais
+// 1. Controle de Modais
 async function toggleModal(tipo, show = true) { 
     let modalId = `modal-${tipo}`;
 
     if (tipo === 'entrada' || tipo === 'saida') {
         if (show) {
-            document.getElementById('mov-tipo').value = tipo;
-            document.getElementById('mov-title').innerText = tipo === 'entrada' ? 'Dar Entrada' : 'Dar Saída';
-            
+            const inputTipo = document.getElementById('mov-tipo');
+            const title = document.getElementById('mov-title');
             const btn = document.getElementById('btn-mov-submit');
-            btn.className = tipo === 'entrada' 
-                ? 'w-full p-4 rounded-2xl font-bold text-white transition shadow-lg mt-4 bg-emerald-600 hover:bg-emerald-700'
-                : 'w-full p-4 rounded-2xl font-bold text-white transition shadow-lg mt-4 bg-red-500 hover:bg-red-600';
+
+            if (inputTipo) inputTipo.value = tipo;
+            if (title) title.innerText = tipo === 'entrada' ? 'Dar Entrada' : 'Dar Saída';
             
+            if (btn) {
+                btn.className = tipo === 'entrada' 
+                    ? 'w-full p-4 rounded-2xl font-bold text-white transition shadow-lg mt-4 bg-emerald-600 hover:bg-emerald-700'
+                    : 'w-full p-4 rounded-2xl font-bold text-white transition shadow-lg mt-4 bg-red-500 hover:bg-red-600';
+            }
             await carregarSelectProdutos();
         }
         modalId = 'modal-movimentacao';
@@ -25,152 +29,115 @@ async function toggleModal(tipo, show = true) {
     }
 }
 
-// 2. Função Unificada para Carregar os Dados (Estoque + Histórico)
+// 2. Carregar Dados do Banco
 async function carregarTudo() {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+        if (typeof supabase === 'undefined') return;
 
-    // A. Carregar Estoque Atual
-    const { data: produtos, error: errProd } = await supabase
-        .from('products')
-        .select('*')
-        .eq('owner_email', user.email)
-        .order('name', { ascending: true });
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
 
-    if (errProd) console.error("Erro produtos:", errProd);
-    else renderizarEstoque(produtos);
+        // Estoque
+        const { data: produtos } = await supabase
+            .from('products')
+            .select('*')
+            .eq('owner_email', user.email)
+            .order('name');
+        
+        renderizarEstoque(produtos || []);
 
-    // B. Carregar Histórico de Movimentações (Relacionando com a tabela de produtos)
-    const { data: historico, error: errHist } = await supabase
-        .from('stock_movements')
-        .select('*, products(name)')
-        .eq('owner_email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(10); // Mostra os 10 últimos
+        // Histórico
+        const { data: historico } = await supabase
+            .from('stock_movements')
+            .select('*, products(name)')
+            .eq('owner_email', user.email)
+            .order('created_at', { ascending: false })
+            .limit(10);
+        
+        renderizarHistorico(historico || []);
 
-    if (errHist) console.error("Erro histórico:", errHist);
-    else renderizarHistorico(historico);
+    } catch (error) {
+        console.error("Erro ao carregar tudo:", error);
+    }
 }
 
 function renderizarEstoque(produtos) {
     const tbody = document.getElementById('lista-estoque');
-    const totalItensEl = document.getElementById('total-itens');
-    const totalCriticoEl = document.getElementById('total-critico');
-    
-    tbody.innerHTML = '';
     let criticos = 0;
-
-    produtos.forEach(item => {
+    tbody.innerHTML = produtos.map(item => {
         const isCritico = item.current_stock <= item.min_stock;
         if (isCritico) criticos++;
-
-        tbody.innerHTML += `
+        return `
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
-                <td class="px-6 py-4">
-                    <p class="font-bold text-slate-800">${item.name}</p>
-                    <p class="text-[10px] text-gray-400 uppercase font-bold">${item.brand || 'S/ Marca'}</p>
-                </td>
+                <td class="px-6 py-4 font-bold text-slate-800">${item.name}</td>
                 <td class="px-6 py-4 text-gray-500">${item.sku || '-'}</td>
-                <td class="px-6 py-4 font-bold ${isCritico ? 'text-red-500' : 'text-slate-700'}">
-                    ${item.current_stock} <span class="text-[10px] font-normal text-gray-400">${item.unit}</span>
-                </td>
-                <td class="px-6 py-4">
-                    <span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${isCritico ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}">
-                        ${isCritico ? 'Crítico' : 'Normal'}
-                    </span>
-                </td>
+                <td class="px-6 py-4 font-bold ${isCritico ? 'text-red-500' : 'text-slate-700'}">${item.current_stock} ${item.unit}</td>
+                <td class="px-6 py-4"><span class="px-2 py-1 rounded-md text-[9px] font-black uppercase ${isCritico ? 'bg-red-100 text-red-600' : 'bg-emerald-100 text-emerald-600'}">${isCritico ? 'Crítico' : 'Normal'}</span></td>
             </tr>`;
-    });
-
-    totalItensEl.innerText = produtos.length;
-    totalCriticoEl.innerText = criticos;
+    }).join('');
+    document.getElementById('total-itens').innerText = produtos.length;
+    document.getElementById('total-critico').innerText = criticos;
 }
 
 function renderizarHistorico(movimentos) {
     const tbody = document.getElementById('lista-historico');
     tbody.innerHTML = movimentos.map(m => `
-        <tr class="border-b border-gray-50 hover:bg-gray-50 transition text-gray-600">
-            <td class="px-6 py-3 text-[11px]">${new Date(m.created_at).toLocaleString('pt-BR')}</td>
-            <td class="px-6 py-3 font-semibold text-slate-700">${m.products?.name || 'Produto Excluído'}</td>
-            <td class="px-6 py-3">
-                <span class="font-bold text-[10px] ${m.type === 'entrada' ? 'text-emerald-500' : 'text-red-500'}">
-                    ${m.type === 'entrada' ? '↑ ENTRADA' : '↓ SAÍDA'}
-                </span>
-            </td>
+        <tr class="border-b border-gray-50 text-gray-600">
+            <td class="px-6 py-3">${new Date(m.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-3 font-medium">${m.products?.name || 'Excluído'}</td>
+            <td class="px-6 py-3"><span class="${m.type === 'entrada' ? 'text-emerald-600' : 'text-red-600'} font-bold uppercase text-xs">${m.type}</span></td>
             <td class="px-6 py-3 font-bold">${m.quantity}</td>
-            <td class="px-6 py-3 text-xs italic text-gray-400">${m.reason || '-'}</td>
-        </tr>
-    `).join('');
+            <td class="px-6 py-3 text-xs italic">${m.reason || '-'}</td>
+        </tr>`).join('');
 }
 
-// 3. Cadastro de Produto
-const formProduto = document.getElementById('form-produto');
-if (formProduto) {
-    formProduto.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const { data: { user } } = await supabase.auth.getUser();
+// 3. Salvar Produto
+document.getElementById('form-produto')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { data: { user } } = await supabase.auth.getUser();
+    const { error } = await supabase.from('products').insert([{
+        name: document.getElementById('p-nome').value,
+        sku: document.getElementById('p-codigo').value,
+        unit: document.getElementById('p-unidade').value,
+        current_stock: parseFloat(document.getElementById('p-inicial').value) || 0,
+        min_stock: parseFloat(document.getElementById('p-min').value) || 0,
+        owner_email: user.email
+    }]);
+    if (error) alert(error.message);
+    else { toggleModal('produto', false); e.target.reset(); carregarTudo(); }
+});
 
-        const produtoData = {
-            name: document.getElementById('p-nome').value,
-            sku: document.getElementById('p-codigo').value,
-            brand: document.getElementById('p-marca').value,
-            unit: document.getElementById('p-unidade').value,
-            current_stock: parseFloat(document.getElementById('p-inicial').value) || 0,
-            min_stock: parseFloat(document.getElementById('p-min').value) || 0,
-            max_stock: parseFloat(document.getElementById('p-max').value) || 100,
-            owner_email: user.email
-        };
+// 4. Salvar Movimentação
+document.getElementById('form-movimentacao')?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const { data: { user } } = await supabase.auth.getUser();
+    const tipo = document.getElementById('mov-tipo').value;
+    const prodId = document.getElementById('mov-produto').value;
+    const qtd = parseFloat(document.getElementById('mov-qtd').value);
 
-        const { error } = await supabase.from('products').insert([produtoData]);
-        if (error) return alert("Erro ao salvar: " + error.message);
+    const { data: prod } = await supabase.from('products').select('current_stock').eq('id', prodId).single();
+    const novoSaldo = tipo === 'entrada' ? prod.current_stock + qtd : prod.current_stock - qtd;
 
-        formProduto.reset();
-        toggleModal('produto', false);
-        carregarTudo();
-    });
-}
+    if (novoSaldo < 0) return alert("Saldo insuficiente!");
 
-// 4. Cadastro de Movimentação
-const formMovimentacao = document.getElementById('form-movimentacao');
-if (formMovimentacao) {
-    formMovimentacao.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const { data: { user } } = await supabase.auth.getUser();
-        
-        const tipo = document.getElementById('mov-tipo').value;
-        const productId = document.getElementById('mov-produto').value;
-        const qtd = parseFloat(document.getElementById('mov-qtd').value);
-        const motivo = document.getElementById('mov-motivo').value;
+    await supabase.from('stock_movements').insert([{
+        owner_email: user.email, product_id: prodId, type: tipo, quantity: qtd, reason: document.getElementById('mov-motivo').value
+    }]);
+    await supabase.from('products').update({ current_stock: novoSaldo }).eq('id', prodId);
 
-        // Buscar saldo atual para o Kardex
-        const { data: prod } = await supabase.from('products').select('current_stock').eq('id', productId).single();
-        const novoSaldo = tipo === 'entrada' ? prod.current_stock + qtd : prod.current_stock - qtd;
+    toggleModal('movimentacao', false);
+    e.target.reset();
+    carregarTudo();
+});
 
-        if (novoSaldo < 0) return alert("Atenção: Saldo insuficiente no estoque!");
-
-        // Gravar histórico e atualizar saldo em paralelo
-        await Promise.all([
-            supabase.from('stock_movements').insert([{
-                owner_email: user.email, product_id: productId, type: tipo,
-                quantity: qtd, reason: motivo, previous_stock: prod.current_stock, after_stock: novoSaldo
-            }]),
-            supabase.from('products').update({ current_stock: novoSaldo }).eq('id', productId)
-        ]);
-
-        formMovimentacao.reset();
-        toggleModal('movimentacao', false);
-        carregarTudo();
-    });
-}
-
-// 5. Auxiliar: Carregar Select de Produtos
 async function carregarSelectProdutos() {
     const { data: { user } } = await supabase.auth.getUser();
-    const { data: produtos } = await supabase.from('products').select('id, name').eq('owner_email', user.email).order('name');
-    const select = document.getElementById('mov-produto');
-    select.innerHTML = '<option value="">Selecione...</option>' + 
-        produtos.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+    const { data: prods } = await supabase.from('products').select('id, name').eq('owner_email', user.email);
+    document.getElementById('mov-produto').innerHTML = '<option value="">Selecione...</option>' + 
+        prods.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
 }
 
-// Inicialização
-document.addEventListener('DOMContentLoaded', carregarTudo);
+// Inicialização com atraso de segurança para o Supabase
+window.onload = () => {
+    setTimeout(carregarTudo, 500); 
+};

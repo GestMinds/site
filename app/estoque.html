@@ -46,8 +46,7 @@
             </div>
 
             <section class="p-8">
-                <h3 class="font-bold text-slate-800 mb-4">Inventário Atual</h3>
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden text-sm">
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
@@ -63,16 +62,16 @@
             </section>
 
             <section class="p-8 pt-0">
-                <h3 class="font-bold text-slate-800 mb-4">Histórico de Movimentações (Kardex)</h3>
-                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden text-sm">
-                    <table class="w-full text-left border-collapse">
+                <h3 class="font-bold text-slate-800 mb-4 px-2 text-sm uppercase tracking-wider">Histórico Recente (Kardex)</h3>
+                <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                    <table class="w-full text-left border-collapse text-sm">
                         <thead class="bg-gray-50 border-b border-gray-200">
                             <tr>
-                                <th class="px-6 py-3 font-bold text-gray-400 uppercase text-[10px]">Data</th>
-                                <th class="px-6 py-3 font-bold text-gray-400 uppercase text-[10px]">Produto</th>
-                                <th class="px-6 py-3 font-bold text-gray-400 uppercase text-[10px]">Operação</th>
-                                <th class="px-6 py-3 font-bold text-gray-400 uppercase text-[10px]">Qtd</th>
-                                <th class="px-6 py-3 font-bold text-gray-400 uppercase text-[10px]">Observação</th>
+                                <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Data</th>
+                                <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Produto</th>
+                                <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Tipo</th>
+                                <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Qtd</th>
+                                <th class="px-6 py-3 text-xs font-bold text-gray-400 uppercase">Motivo</th>
                             </tr>
                         </thead>
                         <tbody id="lista-historico"></tbody>
@@ -81,6 +80,65 @@
             </section>
         </div>
     </main>
+
+    <div id="modal-produto" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex justify-center items-center">
+        <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-xl font-bold text-slate-800">Novo Produto</h3>
+                <button onclick="toggleModal('produto', false)" class="text-gray-400 hover:bg-gray-100 p-2 rounded-full transition">✕</button>
+            </div>
+            <form id="form-produto" class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Nome</label>
+                    <input type="text" id="p-nome" required class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Código</label>
+                    <input type="text" id="p-codigo" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Unidade</label>
+                    <select id="p-unidade" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                        <option value="un">un</option><option value="kg">kg</option><option value="cx">cx</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Qtd Inicial</label>
+                    <input type="number" id="p-inicial" value="0" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1 text-red-400">Estoque Mín.</label>
+                    <input type="number" id="p-min" value="5" class="w-full p-3 bg-gray-50 border border-gray-200 rounded-xl">
+                </div>
+                <button type="submit" class="col-span-2 bg-emerald-600 text-white p-4 rounded-2xl font-bold mt-2 hover:bg-emerald-700 transition">Salvar Produto</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-movimentacao" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex justify-center items-center">
+        <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="mov-title" class="text-xl font-bold text-slate-800 text-center">Movimentação</h3>
+                <button onclick="toggleModal('movimentacao', false)" class="text-gray-400 hover:bg-gray-100 p-2 rounded-full">✕</button>
+            </div>
+            <form id="form-movimentacao" class="space-y-4">
+                <input type="hidden" id="mov-tipo">
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Produto</label>
+                    <select id="mov-produto" required class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Quantidade</label>
+                    <input type="number" id="mov-qtd" required min="1" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1">Motivo</label>
+                    <input type="text" id="mov-motivo" placeholder="Ex: Ajuste ou Compra" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl outline-none">
+                </div>
+                <button type="submit" id="btn-mov-submit" class="w-full p-4 rounded-2xl font-bold text-white transition shadow-lg mt-4">Confirmar</button>
+            </form>
+        </div>
+    </div>
 
     <script src="assets/js/inventory.js"></script>
 </body>
