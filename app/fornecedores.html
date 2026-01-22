@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Fornecedores</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
+</head>
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
+            Gest<span class="text-blue-500">Minds</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 transition">Dashboard</a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 transition">Clientes</a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg bg-indigo-600 text-white shadow-lg">Fornecedores</a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <div>
+                <h2 class="font-bold text-slate-800 text-lg">Gestão de Fornecedores</h2>
+                <p class="text-xs text-gray-400">Gerencie seus parceiros e suprimentos</p>
+            </div>
+            <button onclick="toggleModal(true)" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold hover:bg-indigo-700 transition shadow-md shadow-indigo-200">
+                + Novo Fornecedor
+            </button>
+        </header>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50/50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Empresa / Contato</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Documento</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-fornecedores">
+                        <tr><td colspan="3" class="p-10 text-center text-gray-400">Carregando parceiros...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-fornecedor" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex justify-center items-center">
+        <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8 transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-800">Cadastrar Fornecedor</h3>
+                    <p class="text-sm text-gray-400">Preencha os dados básicos da empresa</p>
+                </div>
+                <button onclick="toggleModal(false)" class="text-gray-400 hover:bg-gray-100 p-2 rounded-full transition">✕</button>
+            </div>
+
+            <form id="form-fornecedor" class="grid grid-cols-2 gap-4">
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1 ml-1">Razão Social / Nome</label>
+                    <input type="text" id="f-nome" required placeholder="Ex: Distribuidora Silva LTDA" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1 ml-1">E-mail</label>
+                    <input type="email" id="f-email" placeholder="contato@empresa.com" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <div class="col-span-2 sm:col-span-1">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1 ml-1">Telefone</label>
+                    <input type="text" id="f-tel" placeholder="(00) 00000-0000" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-xs font-bold text-gray-400 uppercase mb-1 ml-1">CNPJ / CPF</label>
+                    <input type="text" id="f-doc" placeholder="00.000.000/0001-00" class="w-full p-3.5 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none transition">
+                </div>
+                
+                <button type="submit" id="btn-salvar" class="col-span-2 bg-indigo-600 text-white p-4 rounded-2xl font-bold hover:bg-indigo-700 transition mt-4 shadow-lg shadow-indigo-200">
+                    Confirmar Cadastro
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/suppliers.js"></script>
+</body>
+</html>
