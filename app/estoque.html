@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Estoque</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+</head>
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">Gest<span class="text-blue-500">Minds</span></div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 transition">Dashboard</a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 transition">Clientes</a>
+            <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg bg-emerald-600 text-white shadow-lg">Estoque</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <h2 class="font-bold text-slate-800 text-lg">Almoxarifado & Estoque</h2>
+            <div class="flex gap-3">
+                <button onclick="toggleModal('saida')" class="bg-red-100 text-red-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-red-200 transition">- Saída</button>
+                <button onclick="toggleModal('entrada')" class="bg-emerald-100 text-emerald-600 px-4 py-2 rounded-lg text-sm font-bold hover:bg-emerald-200 transition">+ Entrada</button>
+                <button onclick="toggleModal('produto')" class="bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-900 transition">+ Novo Produto</button>
+            </div>
+        </header>
+
+        <div class="p-8 pb-0 grid grid-cols-4 gap-4">
+            <div class="bg-white p-4 rounded-xl border border-gray-200 shadow-sm">
+                <p class="text-xs font-bold text-gray-400 uppercase">Total Itens</p>
+                <p id="total-itens" class="text-2xl font-black text-slate-800">0</p>
+            </div>
+            <div class="bg-red-50 p-4 rounded-xl border border-red-100 shadow-sm">
+                <p class="text-xs font-bold text-red-400 uppercase">Estoque Crítico</p>
+                <p id="total-critico" class="text-2xl font-black text-red-600">0</p>
+            </div>
+        </div>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Produto</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Código</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Qtd Atual</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-estoque">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-produto" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex justify-center items-center">
+        </div>
+
+    <script src="assets/js/inventory.js"></script>
+</body>
+</html>
