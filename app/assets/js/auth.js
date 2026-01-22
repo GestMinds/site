@@ -3,13 +3,14 @@
 window.SUPABASE_URL = 'https://dduistcgwxuiciyqeidd.supabase.co';
 window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
 
-// Criamos a instância globalmente
+// PADRONIZADO: Agora usamos 'supabase' sem underline para todo o projeto
 window.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 const Auth = {
     async login(email, password) {
         try {
-            const { data, error } = await _supabase
+            // CORREÇÃO AQUI: Mudado de _supabase para supabase
+            const { data, error } = await supabase
                 .from('profiles')
                 .select('*')
                 .eq('email', email)
@@ -23,9 +24,8 @@ const Auth = {
                 return false;
             }
 
-            // AJUSTE AQUI: Incluindo o ID para o Multi-tenant funcionar
             const userData = {
-                id: data.id, // O UUID da tabela profiles
+                id: data.id, 
                 name: data.full_name,
                 email: data.email,
                 plan: data.plan_type, 
@@ -56,8 +56,6 @@ const Auth = {
     checkAccess() {
         const user = localStorage.getItem('@GestMinds:user');
         const path = window.location.pathname;
-        
-        // Impede loop de redirecionamento
         const isLoginPage = path.includes('login.html');
 
         if (!user && !isLoginPage) {
