@@ -1,6 +1,6 @@
 // assets/js/inventory.js
 
-async function toggleModal(tipo, show) {
+async function toggleModal(tipo, show = true) { 
     let modalId = `modal-${tipo}`;
 
     // Lógica especial para Entrada e Saída
