@@ -74,26 +74,51 @@ function renderizarResumo(dados) {
 async function salvarTransacao(e) {
     e.preventDefault();
     const user = getLoggedUser();
+    const btn = document.getElementById('btn-salvar');
     
-    const novaTransacao = {
-        user_id: user.id,
-        owner_email: user.email,
-        description: document.getElementById('f-descricao').value,
-        amount: parseFloat(document.getElementById('f-valor').value),
-        type: document.getElementById('f-tipo').value,
-        status: document.getElementById('f-status').value,
-        due_date: document.getElementById('f-data').value,
-        category: document.getElementById('f-categoria').value
-    };
+    // Validação básica de segurança
+    if (!user || !user.id) {
+        alert("Sessão expirada. Faça login novamente.");
+        return;
+    }
 
-    const { error } = await supabaseClient.from('finances').insert([novaTransacao]);
-    
-    if (error) {
-        alert("Erro: " + error.message);
-    } else {
+    if (btn) { btn.innerText = 'Processando...'; btn.disabled = true; }
+
+    try {
+        // Capturando os valores e garantindo o formato correto
+        const descricao = document.getElementById('f-descricao').value;
+        const valor = parseFloat(document.getElementById('f-valor').value);
+        const dataVencimento = document.getElementById('f-data').value;
+        const tipo = document.getElementById('f-tipo').value;
+        const status = document.getElementById('f-status').value;
+        const categoria = document.getElementById('f-categoria').value;
+
+        const { error } = await supabaseClient
+            .from('finances')
+            .insert([{
+                user_id: user.id, // O Supabase espera que isso seja um UUID válido
+                owner_email: user.email,
+                description: descricao,
+                amount: valor,
+                type: tipo,
+                status: status,
+                due_date: dataVencimento,
+                category: categoria || 'Geral'
+            }]);
+        
+        if (error) throw error;
+
+        // Sucesso
         toggleModal(false);
         e.target.reset();
-        carregarFinanceiro();
+        await carregarFinanceiro();
+
+    } catch (err) {
+        console.error("Erro detalhado do Supabase:", err);
+        // Se o erro for de UUID, vamos mostrar exatamente onde está
+        alert("Erro no Banco de Dados: " + err.message);
+    } finally {
+        if (btn) { btn.innerText = 'Confirmar Lançamento'; btn.disabled = false; }
     }
 }
 
