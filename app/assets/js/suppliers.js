@@ -1,14 +1,18 @@
 // assets/js/suppliers.js
 
-// Função local para evitar conflito de variável global "user"
 function getLoggedSupplierUser() {
     const userData = localStorage.getItem('@GestMinds:user');
     return userData ? JSON.parse(userData) : null;
 }
 
-function toggleModalFornecedor(show) {
+// Voltamos para o nome que o HTML espera: toggleModal
+function toggleModal(show) {
     const modal = document.getElementById('modal-fornecedor');
-    if (modal) modal.classList.toggle('hidden', !show);
+    if (modal) {
+        modal.classList.toggle('hidden', !show);
+    } else {
+        console.error("Elemento 'modal-fornecedor' não encontrado no HTML.");
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -91,7 +95,7 @@ async function salvarFornecedor(e) {
         if (error) throw error;
 
         document.getElementById('form-fornecedor').reset();
-        toggleModalFornecedor(false);
+        toggleModal(false); // Fechar o modal
         await listarFornecedores();
     } catch (err) {
         alert("Erro: " + err.message);

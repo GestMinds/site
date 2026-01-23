@@ -1,18 +1,21 @@
 // assets/js/customers.js
 
-// Usamos uma função para buscar o usuário sem poluir o escopo global
 function getLoggedUser() {
     const userData = localStorage.getItem('@GestMinds:user');
-    return userData ? JSON.parse(userData) : null;
+    return userData ? JSON.parse(userData) : null;  
 }
 
-function toggleModalCliente(show) {
+// Voltamos para o nome que o HTML espera: toggleModal
+function toggleModal(show) {
     const modal = document.getElementById('modal-cliente');
-    if (modal) modal.classList.toggle('hidden', !show);
+    if (modal) {
+        modal.classList.toggle('hidden', !show);
+    } else {
+        console.error("Elemento 'modal-cliente' não encontrado no HTML.");
+    }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificamos se o supabaseClient (do auth.js) existe
     if (typeof supabaseClient === 'undefined') {
         console.error("Erro: supabaseClient não definido. Verifique o auth.js");
         return;
@@ -22,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const form = document.getElementById('form-cliente');
     if (form) {
-        form.removeEventListener('submit', salvarCliente); // Previne duplicados
+        form.removeEventListener('submit', salvarCliente);
         form.addEventListener('submit', salvarCliente);
     }
 });
@@ -83,7 +86,7 @@ async function salvarCliente(e) {
         if (error) throw error;
 
         document.getElementById('form-cliente').reset();
-        toggleModalCliente(false);
+        toggleModal(false); // Fechar o modal
         await listarClientes(); 
 
     } catch (err) {
