@@ -25,6 +25,19 @@ async function verificarPlano() {
         if (error) throw error;
 
         const alerta = document.getElementById('alerta-plano');
+        
+        // Lógica: Se for GestMinds Essencial, mostra o alerta. 
+        // Caso contrário (Pro ou Enterprise), mantém escondido.
+        if (data && data.plan_type === 'GestMinds Essencial') {
+            alerta.classList.remove('hidden');
+        } else {
+            alerta.classList.add('hidden');
+        }
+
+    } catch (err) {
+        console.error("Erro ao verificar plano:", err.message);
+    }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof supabaseClient === 'undefined') return;
