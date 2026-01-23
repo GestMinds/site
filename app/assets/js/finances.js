@@ -23,21 +23,23 @@ async function carregarFinanceiro() {
     if (!tbody || !user) return;
 
     try {
+        // Mudamos de '*, customers(name)' para apenas '*'
         const { data, error } = await supabaseClient
             .from('finances')
-            .select('*, customers(name)')
-            .eq('user_id', user.id)
+            .select('*') 
+            .eq('user_id', String(user.id))
             .order('due_date', { ascending: true });
 
         if (error) throw error;
 
         renderizarResumo(data);
         
+        // No map, removemos a menção ao t.customers.name que daria erro
         tbody.innerHTML = data.map(t => `
             <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
                 <td class="px-6 py-4 text-sm">${new Date(t.due_date).toLocaleDateString('pt-BR')}</td>
                 <td class="px-6 py-4 font-medium text-slate-800">${t.description}</td>
-                <td class="px-6 py-4 text-sm text-gray-500">${t.customers?.name || '-'}</td>
+                <td class="px-6 py-4 text-sm text-gray-500">-</td> 
                 <td class="px-6 py-4 font-bold ${t.type === 'receita' ? 'text-emerald-600' : 'text-red-500'}">
                     ${t.type === 'receita' ? '+' : '-'} R$ ${t.amount.toFixed(2)}
                 </td>
