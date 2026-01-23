@@ -39,8 +39,8 @@ async function carregarTudo() {
     if (!user) return console.error("Usuário não identificado.");
 
     try {
-        // A. Buscar Estoque Atual
-        const { data: produtos, error: errProd } = await supabase
+        // A. Buscar Estoque Atual usando supabaseClient
+        const { data: produtos, error: errProd } = await supabaseClient
             .from('products')
             .select('*')
             .eq('owner_email', user.email)
@@ -49,8 +49,8 @@ async function carregarTudo() {
         if (errProd) throw errProd;
         renderizarEstoque(produtos || []);
 
-        // B. Buscar Histórico (Kardex) - Fazendo Join com a tabela de produtos para pegar o nome
-        const { data: historico, error: errHist } = await supabase
+        // B. Buscar Histórico (Kardex) usando supabaseClient
+        const { data: historico, error: errHist } = await supabaseClient
             .from('stock_movements')
             .select('*, products(name)')
             .eq('owner_email', user.email)
@@ -130,7 +130,7 @@ document.getElementById('form-produto')?.addEventListener('submit', async (e) =>
         owner_email: user.email
     };
 
-    const { error } = await supabase.from('products').insert([data]);
+    const { error } = await supabaseClient.from('products').insert([data]);
     if (error) return alert("Erro ao cadastrar: " + error.message);
 
     toggleModal('produto', false);
@@ -146,19 +146,19 @@ document.getElementById('form-movimentacao')?.addEventListener('submit', async (
     const prodId = document.getElementById('mov-produto').value;
     const qtd = parseFloat(document.getElementById('mov-qtd').value);
 
-    // 1. Pegar saldo atual
-    const { data: prod } = await supabase.from('products').select('current_stock').eq('id', prodId).single();
+    // 1. Pegar saldo atual usando supabaseClient
+    const { data: prod } = await supabaseClient.from('products').select('current_stock').eq('id', prodId).single();
     const novoSaldo = tipo === 'entrada' ? prod.current_stock + qtd : prod.current_stock - qtd;
 
     if (novoSaldo < 0) return alert("Atenção: Saldo insuficiente!");
 
-    // 2. Gravar histórico e atualizar saldo
-    await supabase.from('stock_movements').insert([{
+    // 2. Gravar histórico e atualizar saldo usando supabaseClient
+    await supabaseClient.from('stock_movements').insert([{
         owner_email: user.email, product_id: prodId, type: tipo, 
         quantity: qtd, reason: document.getElementById('mov-motivo').value
     }]);
 
-    await supabase.from('products').update({ current_stock: novoSaldo }).eq('id', prodId);
+    await supabaseClient.from('products').update({ current_stock: novoSaldo }).eq('id', prodId);
 
     toggleModal('movimentacao', false);
     e.target.reset();
@@ -168,7 +168,7 @@ document.getElementById('form-movimentacao')?.addEventListener('submit', async (
 // 7. Auxiliar: Carregar o Select com produtos da empresa
 async function carregarSelectProdutos() {
     const user = getLoggedUser();
-    const { data: prods } = await supabase.from('products').select('id, name').eq('owner_email', user.email).order('name');
+    const { data: prods } = await supabaseClient.from('products').select('id, name').eq('owner_email', user.email).order('name');
     const select = document.getElementById('mov-produto');
     if (select) {
         select.innerHTML = '<option value="">Selecione...</option>' + 
