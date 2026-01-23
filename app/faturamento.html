@@ -9,6 +9,8 @@
     <script src="assets/js/auth.js"></script>
     <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
 </head>
+
+
 <body class="bg-gray-50 h-screen flex overflow-hidden">
 
     <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
@@ -69,6 +71,102 @@
             </div>
         </section>
     </main>
+
+            <div id="modal-nfe" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 md:p-4">
+            <div class="bg-white w-full max-w-6xl max-h-[95vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+                
+                <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-800">Emissor de NF-e Integrado</h3>
+                        <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Modelo 55 | Série 001 | Ambiente: <span class="text-orange-600">Homologação</span></p>
+                    </div>
+                    <button onclick="toggleNfeModal(false)" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+                </div>
+
+                <div class="flex flex-1 overflow-hidden">
+                    <aside class="w-48 bg-slate-50 border-r border-gray-100 flex flex-col p-2 space-y-1 hidden md:flex">
+                        <button onclick="switchTab(1)" class="tab-btn active-tab text-left p-3 rounded-lg text-xs font-bold transition">1. Emitente</button>
+                        <button onclick="switchTab(2)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">2. Destinatário</button>
+                        <button onclick="switchTab(3)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">3. Cabeçalho</button>
+                        <button onclick="switchTab(4)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">4. Itens/Impostos</button>
+                        <button onclick="switchTab(5)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">5. Totais</button>
+                        <button onclick="switchTab(6)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">6. Transporte</button>
+                        <button onclick="switchTab(7)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">7. Pagamento</button>
+                        <button onclick="switchTab(8)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">8. Info. Adicionais</button>
+                    </aside>
+
+                    <div class="flex-1 overflow-y-auto p-6 bg-white" id="nfe-tabs-content">
+                        
+                        <div id="tab-1" class="nfe-tab-content space-y-4">
+                            <h4 class="font-bold text-slate-800 border-b pb-2">Dados do Emitente (Minha Empresa)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div><label class="label-nfe">CNPJ</label><input type="text" id="em-cnpj" class="input-nfe" placeholder="00.000.000/0000-00"></div>
+                                <div class="md:col-span-2"><label class="label-nfe">Razão Social</label><input type="text" id="em-razao" class="input-nfe"></div>
+                                <div><label class="label-nfe">Insc. Estadual</label><input type="text" id="em-ie" class="input-nfe"></div>
+                                <div class="md:col-span-2"><label class="label-nfe">Regime Tributário</label>
+                                    <select id="em-regime" class="input-nfe">
+                                        <option value="1">Simples Nacional</option>
+                                        <option value="2">Lucro Presumido</option>
+                                        <option value="3">Lucro Real</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                <div class="col-span-2"><label class="label-nfe">Logradouro</label><input type="text" id="em-rua" class="input-nfe"></div>
+                                <div><label class="label-nfe">Número</label><input type="text" id="em-num" class="input-nfe"></div>
+                                <div><label class="label-nfe">CEP</label><input type="text" id="em-cep" class="input-nfe"></div>
+                            </div>
+                            <button onclick="saveFiscalSettings()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold text-xs">Salvar Dados do Emitente</button>
+                        </div>
+
+                        <div id="tab-2" class="nfe-tab-content hidden space-y-4">
+                            <h4 class="font-bold text-slate-800 border-b pb-2">Dados do Destinatário (Cliente)</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div><label class="label-nfe">CPF/CNPJ</label><input type="text" id="dest-doc" class="input-nfe"></div>
+                                <div><label class="label-nfe">Nome / Razão Social</label><input type="text" id="dest-nome" class="input-nfe"></div>
+                                <div><label class="label-nfe">Inscrição Estadual</label><input type="text" id="dest-ie" class="input-nfe" placeholder="ISENTO"></div>
+                                <div><label class="label-nfe">E-mail para Envio</label><input type="email" id="dest-email" class="input-nfe"></div>
+                            </div>
+                        </div>
+
+                        <div id="tab-4" class="nfe-tab-content hidden space-y-4">
+                            <div class="flex justify-between items-center border-b pb-2">
+                                <h4 class="font-bold text-slate-800">Itens e Tributação</h4>
+                                <button class="text-blue-600 font-bold text-xs">+ Adicionar Item</button>
+                            </div>
+                            <table class="w-full text-[11px]">
+                                <thead class="bg-gray-50 text-gray-500">
+                                    <tr>
+                                        <th class="p-2">Código</th>
+                                        <th class="p-2">Descrição</th>
+                                        <th class="p-2">NCM</th>
+                                        <th class="p-2">Qtd</th>
+                                        <th class="p-2">V. Unit</th>
+                                        <th class="p-2">Total</th>
+                                        <th class="p-2">Impostos</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="nfe-itens-lista">
+                                    </tbody>
+                            </table>
+                        </div>
+
+                        </div>
+                </div>
+
+                <div class="p-4 border-t bg-slate-50 flex justify-end gap-3">
+                    <button onclick="toggleNfeModal(false)" class="px-6 py-2 text-gray-500 font-bold">Cancelar</button>
+                    <button onclick="validarNfe()" class="bg-slate-700 text-white px-6 py-2 rounded-xl font-bold">Validar NF-e</button>
+                    <button onclick="transmitirSefaz()" class="bg-emerald-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg">Transmitir p/ SEFAZ</button>
+                </div>
+            </div>
+        </div>
+        
+        <style>
+            .input-nfe { @apply w-full p-2 bg-gray-50 border rounded text-sm outline-none focus:border-blue-500; }
+            .label-nfe { @apply block text-[10px] font-bold text-gray-400 uppercase mb-1; }
+            .tab-btn.active-tab { @apply bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm; }
+        </style>
 
     <script src="assets/js/nfe.js"></script>
 </body>
