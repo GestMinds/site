@@ -168,3 +168,68 @@ async function carregarDadosDaEmpresa() {
         document.getElementById('em-cep').value = data.cep || '';
     }
 }
+
+// --- CONFIGURAÇÃO DE MÁSCARAS (IMask) ---
+
+function aplicarMascaras() {
+    // Máscara CNPJ Emitente
+    IMask(document.getElementById('em-cnpj'), { mask: '00.000.000/0000-00' });
+    
+    // Máscara CEP Emitente
+    IMask(document.getElementById('em-cep'), { mask: '00000-000' });
+    
+    // Máscara Telefone Emitente
+    IMask(document.getElementById('em-tel'), { mask: '(00) 00000-0000' });
+
+    // Máscara Dinâmica CPF/CNPJ Destinatário
+    IMask(document.getElementById('dest-doc'), {
+        mask: [
+            { mask: '000.000.000-00', type: 'CPF' },
+            { mask: '00.000.000/0000-00', type: 'CNPJ' }
+        ]
+    });
+}
+
+// Chame a função de máscaras quando o modal abrir
+function abrirEmissor(id) {
+    currentNfeId = id;
+    toggleNfeModal(true);
+    carregarDadosDaEmpresa();
+    setTimeout(aplicarMascaras, 100); // Timeout curto para garantir que o DOM renderizou
+}
+
+// --- VALIDAÇÃO DE E-MAIL ---
+
+function validarEmail(email) {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+}
+
+// Atualização da função validarCampos para incluir lógica de e-mail e IE
+function validarCampos(lista) {
+    let erros = [];
+    Object.keys(lista).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.classList.remove('input-error');
+            const valor = el.value.trim();
+
+            // Validação básica de vazio
+            if (!valor) {
+                el.classList.add('input-error');
+                erros.push(lista[id]);
+            } 
+            // Validação específica de e-mail
+            else if (el.type === 'email' && !validarEmail(valor)) {
+                el.classList.add('input-error');
+                erros.push(`${lista[id]} (E-mail inválido)`);
+            }
+        }
+    });
+
+    if (erros.length > 0) {
+        alert("Atenção aos detalhes:\n\n• " + erros.join('\n• '));
+        return false;
+    }
+    return true;
+}

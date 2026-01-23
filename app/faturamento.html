@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="assets/js/auth.js"></script>
+    <script src="https://unpkg.com/imask"></script>
     <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
     <style>
 
@@ -110,36 +111,60 @@
                 </aside>
 
                 <div class="flex-1 overflow-y-auto p-6 bg-white">
-                    <div id="tab-1" class="nfe-tab-content space-y-4">
-                        <h4 class="font-bold text-slate-800 border-b pb-2">Dados do Emitente (Obrigatório)</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div><label class="label-nfe">CNPJ *</label><input type="text" id="em-cnpj" class="input-nfe" placeholder="00.000.000/0000-00"></div>
-                            <div class="md:col-span-2"><label class="label-nfe">Razão Social *</label><input type="text" id="em-razao" class="input-nfe"></div>
-                            <div><label class="label-nfe">Insc. Estadual *</label><input type="text" id="em-ie" class="input-nfe"></div>
-                            <div class="md:col-span-2"><label class="label-nfe">Regime Tributário *</label>
-                                <select id="em-regime" class="input-nfe">
-                                    <option value="1">Simples Nacional</option>
-                                    <option value="2">Lucro Presumido</option>
-                                    <option value="3">Lucro Real</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                            <div class="col-span-2"><label class="label-nfe">Logradouro *</label><input type="text" id="em-rua" class="input-nfe"></div>
-                            <div><label class="label-nfe">Número *</label><input type="text" id="em-num" class="input-nfe"></div>
-                            <div><label class="label-nfe">CEP *</label><input type="text" id="em-cep" class="input-nfe"></div>
-                        </div>
-                        <button onclick="saveFiscalSettings()" class="bg-slate-900 text-white px-4 py-2 rounded font-bold text-xs hover:bg-black transition">Salvar Dados do Emitente</button>
+                <div id="tab-1" class="nfe-tab-content space-y-4">
+                <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">1. Dados do Emitente</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div>
+                        <label class="label-nfe">CNPJ *</label>
+                        <input type="text" id="em-cnpj" class="input-nfe border-slate-900" placeholder="00.000.000/0000-00">
                     </div>
+                    <div class="md:col-span-2">
+                        <label class="label-nfe">Razão Social *</label>
+                        <input type="text" id="em-razao" class="input-nfe border-slate-900">
+                    </div>
+                    <div>
+                        <label class="label-nfe">Insc. Estadual *</label>
+                        <input type="text" id="em-ie" class="input-nfe border-slate-900">
+                    </div>
+                    <div>
+                        <label class="label-nfe">Telefone *</label>
+                        <input type="text" id="em-tel" class="input-nfe border-slate-900" placeholder="(00) 0000-0000">
+                    </div>
+                    <div>
+                        <label class="label-nfe">Regime Tributário *</label>
+                        <select id="em-regime" class="input-nfe border-slate-900">
+                            <option value="1">1 - Simples Nacional</option>
+                            <option value="2">2 - Lucro Presumido</option>
+                            <option value="3">3 - Lucro Real</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="col-span-2"><label class="label-nfe">Logradouro *</label><input type="text" id="em-rua" class="input-nfe border-slate-900"></div>
+                    <div><label class="label-nfe">Número *</label><input type="text" id="em-num" class="input-nfe border-slate-900"></div>
+                    <div><label class="label-nfe">CEP *</label><input type="text" id="em-cep" class="input-nfe border-slate-900" placeholder="00000-000"></div>
+                </div>
+                <button onclick="saveFiscalSettings()" class="bg-slate-900 text-white px-6 py-2 rounded font-bold text-xs uppercase tracking-widest hover:bg-black transition">Salvar Configurações Fiscais</button>
+            </div>
 
-                    <div id="tab-2" class="nfe-tab-content hidden space-y-4">
-                        <h4 class="font-bold text-slate-800 border-b pb-2">Dados do Destinatário (Cliente)</h4>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div><label class="label-nfe">CPF/CNPJ *</label><input type="text" id="dest-doc" class="input-nfe"></div>
-                            <div><label class="label-nfe">Nome / Razão Social *</label><input type="text" id="dest-nome" class="input-nfe"></div>
-                            <div><label class="label-nfe">Inscrição Estadual</label><input type="text" id="dest-ie" class="input-nfe" placeholder="ISENTO"></div>
-                            <div><label class="label-nfe">E-mail para Envio *</label><input type="email" id="dest-email" class="input-nfe"></div>
-                        </div>
+            <div id="tab-2" class="nfe-tab-content hidden space-y-4">
+                <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">2. Dados do Destinatário</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="label-nfe">CPF ou CNPJ *</label>
+                        <input type="text" id="dest-doc" class="input-nfe border-slate-900" placeholder="000.000.000-00">
+                    </div>
+                    <div>
+                        <label class="label-nfe">Nome / Razão Social *</label>
+                        <input type="text" id="dest-nome" class="input-nfe border-slate-900">
+                    </div>
+                    <div>
+                        <label class="label-nfe">E-mail para Envio *</label>
+                        <input type="email" id="dest-email" class="input-nfe border-slate-900" placeholder="cliente@email.com">
+                    </div>
+                    <div>
+                        <label class="label-nfe">Inscrição Estadual (Opcional)</label>
+                        <input type="text" id="dest-ie" class="input-nfe border-slate-900" placeholder="Isento ou Número">
                     </div>
                 </div>
             </div>
