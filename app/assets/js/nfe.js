@@ -1,9 +1,30 @@
 // assets/js/nfe.js
 
-function getLoggedUser() {
-    const userData = localStorage.getItem('@GestMinds:user');
-    return userData ? JSON.parse(userData) : null;
-}
+document.addEventListener('DOMContentLoaded', async () => {
+    if (typeof supabaseClient === 'undefined') return;
+    
+    // 1. Verifica o plano do usuário primeiro
+    await verificarPlano();
+    
+    // 2. Depois carrega as vendas
+    listarVendasParaFaturar();
+});
+
+async function verificarPlano() {
+    const user = getLoggedUser();
+    if (!user) return;
+
+    try {
+        // Consultamos a tabela profiles para pegar o plano atualizado
+        const { data, error } = await supabaseClient
+            .from('profiles')
+            .select('plan_type')
+            .eq('id', String(user.id))
+            .single();
+
+        if (error) throw error;
+
+        const alerta = document.getElementById('alerta-plano');
 
 document.addEventListener('DOMContentLoaded', () => {
     if (typeof supabaseClient === 'undefined') return;
