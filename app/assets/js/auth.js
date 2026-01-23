@@ -3,14 +3,15 @@
 window.SUPABASE_URL = 'https://dduistcgwxuiciyqeidd.supabase.co';
 window.SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
 
-// PADRONIZADO: Agora usamos 'supabase' sem underline para todo o projeto
-window.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+// AQUI ESTÁ O SEGREDO: Não sobrescrevemos o 'window.supabase' original.
+// Criamos um novo nome para a nossa conexão.
+window.supabaseClient = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
 
 const Auth = {
     async login(email, password) {
         try {
-            // CORREÇÃO AQUI: Mudado de _supabase para supabase
-            const { data, error } = await supabase
+            // Usamos a nossa instância supabaseClient
+            const { data, error } = await supabaseClient
                 .from('profiles')
                 .select('*')
                 .eq('email', email)
@@ -66,5 +67,4 @@ const Auth = {
     }
 };
 
-// Executa a proteção de rota
 Auth.checkAccess();
