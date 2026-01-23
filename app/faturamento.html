@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Faturamento Fiscal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
+</head>
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
+            Gest<span class="text-blue-500">Minds</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
+            </a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Clientes
+            </a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Fornecedores
+            </a>
+                       <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Estoque/Almoxarifado
+            </a>
+                        <a href="financeiro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Financeiro
+            </a>
+                        <a href="faturamento.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Notas Fiscais
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <div>
+                <h2 class="font-bold text-slate-800 text-lg">Emissão de NF-e</h2>
+                <p class="text-xs text-gray-400">Gerencie o faturamento das suas vendas</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full uppercase">Sintegra: Online</span>
+            </div>
+        </header>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="mb-8 bg-blue-50 border border-blue-100 p-4 rounded-2xl flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-600 rounded-xl flex items-center justify-center text-white text-xl">📄</div>
+                <div>
+                    <h4 class="font-bold text-blue-900">Emissão Básica Ativa</h4>
+                    <p class="text-sm text-blue-700">Como você está no Plano Essencial, suas notas são geradas em modo simplificado.</p>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50/50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Venda / Data</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Descrição</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Valor Total</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-center">Status Fiscal</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-faturamento">
+                        <tr><td colspan="5" class="p-10 text-center text-gray-400">Buscando vendas faturáveis...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="assets/js/nfe.js"></script>
+</body>
+</html>
