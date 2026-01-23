@@ -1,28 +1,20 @@
 // assets/js/customers.js
 
-/**
- * NÃO declaramos SUPABASE_URL, SUPABASE_ANON_KEY ou _supabase aqui.
- * O arquivo auth.js já os declarou globalmente no navegador.
- */
-
-// Apenas pegamos o usuário do localStorage
-const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
-
-// Função para abrir e fechar o modal (agora o navegador vai encontrar ela!)
-function toggleModal(show) {
-    const modal = document.getElementById('modal-cliente');
-    if (modal) {
-        modal.classList.toggle('hidden', !show);
-    } else {
-        console.error("Elemento 'modal-cliente' não encontrado no HTML.");
-    }
+// Usamos uma função para buscar o usuário sem poluir o escopo global
+function getLoggedUser() {
+    const userData = localStorage.getItem('@GestMinds:user');
+    return userData ? JSON.parse(userData) : null;
 }
 
-// Garante que o script rode após o HTML carregar
+function toggleModalCliente(show) {
+    const modal = document.getElementById('modal-cliente');
+    if (modal) modal.classList.toggle('hidden', !show);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-    // Verificamos se o banco de dados está disponível (criado pelo auth.js)
-    if (typeof _supabase === 'undefined') {
-        console.error("Erro: _supabase não foi definido pelo auth.js. Verifique a ordem dos scripts.");
+    // Verificamos se o supabaseClient (do auth.js) existe
+    if (typeof supabaseClient === 'undefined') {
+        console.error("Erro: supabaseClient não definido. Verifique o auth.js");
         return;
     }
 
@@ -30,17 +22,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const form = document.getElementById('form-cliente');
     if (form) {
+        form.removeEventListener('submit', salvarCliente); // Previne duplicados
         form.addEventListener('submit', salvarCliente);
     }
 });
 
 async function listarClientes() {
+    const user = getLoggedUser();
     const tbody = document.getElementById('lista-clientes');
     if (!tbody || !user) return;
 
     try {
-        // Usamos a variável _supabase global que já existe
-        const { data, error } = await _supabase
+        const { data, error } = await supabaseClient
             .from('customers')
             .select('*')
             .eq('user_id', user.id)
@@ -60,7 +53,7 @@ async function listarClientes() {
                 <td class="px-6 py-4 text-sm text-gray-500">${cli.email || '-'} <br> <span class="text-xs text-gray-400">${cli.phone || ''}</span></td>
                 <td class="px-6 py-4 text-sm text-gray-600">${cli.document || '-'}</td>
                 <td class="px-6 py-4">
-                    <button onclick="deletarCliente('${cli.id}')" class="text-red-400 hover:text-red-600 text-sm">Excluir</button>
+                    <button onclick="deletarCliente('${cli.id}')" class="text-red-400 hover:text-red-600 text-sm font-bold">Excluir</button>
                 </td>
             </tr>
         `).join('');
@@ -71,9 +64,9 @@ async function listarClientes() {
 
 async function salvarCliente(e) {
     e.preventDefault();
+    const user = getLoggedUser();
     const btn = document.getElementById('btn-salvar');
-    btn.innerText = 'Salvando...';
-    btn.disabled = true;
+    if (btn) { btn.innerText = 'Salvando...'; btn.disabled = true; }
 
     try {
         const novoCliente = {
@@ -86,26 +79,25 @@ async function salvarCliente(e) {
             document: document.getElementById('c-doc').value
         };
 
-        const { error } = await _supabase.from('customers').insert([novoCliente]);
-
+        const { error } = await supabaseClient.from('customers').insert([novoCliente]);
         if (error) throw error;
 
         document.getElementById('form-cliente').reset();
-        toggleModal(false);
+        toggleModalCliente(false);
         await listarClientes(); 
 
     } catch (err) {
         alert("Erro ao salvar: " + err.message);
     } finally {
-        btn.innerText = 'Salvar Cliente';
-        btn.disabled = false;
+        if (btn) { btn.innerText = 'Salvar Cliente'; btn.disabled = false; }
     }
 }
 
 async function deletarCliente(id) {
+    const user = getLoggedUser();
     if (confirm("Deseja realmente excluir este cliente?")) {
         try {
-            const { error } = await _supabase
+            const { error } = await supabaseClient
                 .from('customers')
                 .delete()
                 .eq('id', id)

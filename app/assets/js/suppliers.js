@@ -1,30 +1,38 @@
 // assets/js/suppliers.js
 
-const user = JSON.parse(localStorage.getItem('@GestMinds:user'));
+// Função local para evitar conflito de variável global "user"
+function getLoggedSupplierUser() {
+    const userData = localStorage.getItem('@GestMinds:user');
+    return userData ? JSON.parse(userData) : null;
+}
 
-function toggleModal(show) {
+function toggleModalFornecedor(show) {
     const modal = document.getElementById('modal-fornecedor');
     if (modal) modal.classList.toggle('hidden', !show);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof _supabase === 'undefined') return;
+    if (typeof supabaseClient === 'undefined') return;
     listarFornecedores();
 
     const form = document.getElementById('form-fornecedor');
-    if (form) form.addEventListener('submit', salvarFornecedor);
+    if (form) {
+        form.removeEventListener('submit', salvarFornecedor);
+        form.addEventListener('submit', salvarFornecedor);
+    }
 });
 
 async function listarFornecedores() {
+    const user = getLoggedSupplierUser();
     const tbody = document.getElementById('lista-fornecedores');
     if (!tbody || !user) return;
 
     try {
-        const { data, error } = await _supabase
+        const { data, error } = await supabaseClient
             .from('customers')
             .select('*')
             .eq('user_id', user.id)
-            .eq('type', 'fornecedor') // <--- O SEGREDO ESTÁ AQUI
+            .eq('type', 'fornecedor')
             .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -51,7 +59,7 @@ async function listarFornecedores() {
                     </span>
                 </td>
                 <td class="px-6 py-5 text-center">
-                    <button onclick="deletarFornecedor('${f.id}')" class="opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-600 text-sm font-bold transition">
+                    <button onclick="deletarFornecedor('${f.id}')" class="text-red-400 hover:text-red-600 text-sm font-bold transition">
                         Excluir
                     </button>
                 </td>
@@ -64,38 +72,38 @@ async function listarFornecedores() {
 
 async function salvarFornecedor(e) {
     e.preventDefault();
+    const user = getLoggedSupplierUser();
     const btn = document.getElementById('btn-salvar');
-    btn.innerText = 'Processando...';
-    btn.disabled = true;
+    if (btn) { btn.innerText = 'Processando...'; btn.disabled = true; }
 
     try {
         const novoFornecedor = {
             user_id: user.id,
             owner_email: user.email,
-            type: 'fornecedor', // <--- MARCA COMO FORNECEDOR
+            type: 'fornecedor',
             name: document.getElementById('f-nome').value,
             email: document.getElementById('f-email').value,
             phone: document.getElementById('f-tel').value,
             document: document.getElementById('f-doc').value
         };
 
-        const { error } = await _supabase.from('customers').insert([novoFornecedor]);
+        const { error } = await supabaseClient.from('customers').insert([novoFornecedor]);
         if (error) throw error;
 
         document.getElementById('form-fornecedor').reset();
-        toggleModal(false);
+        toggleModalFornecedor(false);
         await listarFornecedores();
     } catch (err) {
         alert("Erro: " + err.message);
     } finally {
-        btn.innerText = 'Confirmar Cadastro';
-        btn.disabled = false;
+        if (btn) { btn.innerText = 'Confirmar Cadastro'; btn.disabled = false; }
     }
 }
 
 async function deletarFornecedor(id) {
+    const user = getLoggedSupplierUser();
     if (confirm("Deseja remover este fornecedor?")) {
-        await _supabase.from('customers').delete().eq('id', id).eq('user_id', user.id);
+        await supabaseClient.from('customers').delete().eq('id', id).eq('user_id', user.id);
         listarFornecedores();
     }
 }
