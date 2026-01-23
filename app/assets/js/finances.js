@@ -96,7 +96,7 @@ async function salvarTransacao(e) {
         const { error } = await supabaseClient
             .from('finances')
             .insert([{
-                user_id: user.id, // O Supabase espera que isso seja um UUID válido
+                user_id: String(user.id), // Forçamos para texto para garantir
                 owner_email: user.email,
                 description: descricao,
                 amount: valor,
