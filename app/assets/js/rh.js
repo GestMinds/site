@@ -81,14 +81,21 @@ async function listarFuncionarios() {
 
 async function salvarFuncionario(e) {
     e.preventDefault();
-    const userData = JSON.parse(localStorage.getItem('@GestMinds:user'));
-    const btn = e.target.querySelector('button[type="submit"]');
+    
+    // Pega o usuário do localStorage (verifique se a chave está correta)
+    const rawUser = localStorage.getItem('@GestMinds:user');
+    if (!rawUser) return alert("Erro: Usuário não logado.");
+    
+    const userData = JSON.parse(rawUser);
 
-    btn.innerText = "Processando...";
-    btn.disabled = true;
+    // LOG DE DEBUG - Veja se o ID aqui é um UUID ou apenas um número
+    console.log("ID do Usuário logado:", userData.id);
 
     const novoFunc = {
-        user_id: userData.id,
+        // Se o seu banco for o Supabase Auth, o user_id PRECISA ser o UUID.
+        // Se você estiver usando um banco customizado com IDs numéricos, 
+        // a tabela no SQL tem que ser 'int' e não 'uuid'.
+        user_id: userData.id, 
         name: document.getElementById('rh-nome').value,
         cpf: document.getElementById('rh-cpf').value,
         position: document.getElementById('rh-cargo').value,
