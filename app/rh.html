@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Gestão de RH</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
+    <style>
+        .input-rh { @apply w-full p-2 bg-white border border-slate-900 rounded text-sm outline-none focus:border-blue-600 transition-all; }
+        .label-rh { @apply block text-[10px] font-black text-slate-700 uppercase mb-1; }
+    </style>
+</head>
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">Gest<span class="text-blue-500">Minds</span></div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
+            </a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Clientes
+            </a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Fornecedores
+            </a>
+                       <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Estoque/Almoxarifado
+            </a>
+                        <a href="financeiro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Financeiro
+            </a>
+                        <a href="faturamento.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Notas Fiscais
+            </a>
+                        <a href="rh.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Gestão Funcionarios
+            </a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <div>
+                <h2 class="font-bold text-slate-800 text-lg">Recursos Humanos</h2>
+                <p class="text-xs text-gray-400">Controle de colaboradores e folha simplificada</p>
+            </div>
+            <button onclick="toggleModalRH(true)" class="bg-slate-900 text-white px-6 py-2 rounded-xl font-bold text-sm hover:bg-blue-600 transition">
+                + Contratar Funcionário
+            </button>
+        </header>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50/50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Funcionário</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Cargo / Depto</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Salário</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Admissão</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-funcionarios">
+                        </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-rh" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-slate-900">
+            <div class="p-6 border-b border-slate-900 flex justify-between items-center bg-slate-50">
+                <h3 class="text-lg font-bold text-slate-800">Novo Colaborador</h3>
+                <button onclick="toggleModalRH(false)" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+            </div>
+            <form id="form-rh" class="p-6 space-y-4">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2">
+                        <label class="label-rh">Nome Completo *</label>
+                        <input type="text" id="rh-nome" class="input-rh" required>
+                    </div>
+                    <div>
+                        <label class="label-rh">CPF *</label>
+                        <input type="text" id="rh-cpf" class="input-rh" required>
+                    </div>
+                    <div>
+                        <label class="label-rh">Data de Nascimento</label>
+                        <input type="date" id="rh-nasc" class="input-rh">
+                    </div>
+                    <div>
+                        <label class="label-rh">Cargo *</label>
+                        <input type="text" id="rh-cargo" class="input-rh" placeholder="Ex: Analista Financeiro" required>
+                    </div>
+                    <div>
+                        <label class="label-rh">Departamento</label>
+                        <select id="rh-depto" class="input-rh">
+                            <option value="Administrativo">Administrativo</option>
+                            <option value="Vendas">Vendas</option>
+                            <option value="Operacional">Operacional</option>
+                            <option value="TI">TI</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="label-rh">Salário Bruto (R$)</label>
+                        <input type="number" id="rh-salario" class="input-rh" step="0.01">
+                    </div>
+                    <div>
+                        <label class="label-rh">Data de Admissão</label>
+                        <input type="date" id="rh-admissao" class="input-rh">
+                    </div>
+                </div>
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" onclick="toggleModalRH(false)" class="px-6 py-2 text-gray-500 font-bold">Cancelar</button>
+                    <button type="submit" class="bg-slate-900 text-white px-8 py-2 rounded-xl font-bold hover:bg-blue-600 transition">Salvar Contratação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="assets/js/rh.js"></script>
+</body>
+</html>
