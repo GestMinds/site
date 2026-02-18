@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Gestão de Pacientes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="https://unpkg.com/imask"></script>
+    <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
+    <style>
+        .input-clinica { 
+            @apply w-full p-2 bg-white border border-slate-900 rounded text-sm outline-none transition-all;
+        }
+        .input-clinica:focus { 
+            @apply border-blue-600 ring-1 ring-blue-600;
+        }
+        .label-clinica { 
+            @apply block text-[10px] font-black text-slate-700 uppercase mb-1; 
+        }
+        .tab-btn.active-tab { 
+            @apply bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm; 
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
+            Gest<span class="text-blue-500">Minds</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+             <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
+            </a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Clientes
+            </a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Fornecedores
+            </a>
+            <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Estoque/Almoxarifado
+            </a>
+            <a href="financeiro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Financeiro
+            </a>
+            <a href="pacientes.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">
+                Gestão de Pacientes
+            </a>
+            <a href="hc.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                Historico de Consultas
+            </a>
+   
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <div>
+                <h2 class="font-bold text-slate-800 text-lg">Gestão de Pacientes</h2>
+                <p class="text-xs text-gray-400">Cadastre e gerencie o histórico clínico</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <button onclick="togglePacienteModal(true)" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-700 transition shadow-sm">
+                    + Novo Paciente
+                </button>
+            </div>
+        </header>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="mb-6 flex gap-4">
+                <input type="text" placeholder="Buscar paciente por nome ou CPF..." class="flex-1 p-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-500 transition">
+                <select class="p-3 rounded-xl border border-gray-200 text-sm outline-none">
+                    <option>Todos os Status</option>
+                    <option>Em Tratamento</option>
+                    <option>Alta</option>
+                    <option>Aguardando</option>
+                </select>
+            </div>4
+
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50/50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Paciente / CPF</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Contato</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Convênio</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-center">Status</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-right">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-pacientes">
+                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                            <td class="px-6 py-4">
+                                <div class="font-bold text-slate-800">João Silva Oliveira</div>
+                                <div class="text-[10px] text-gray-400 uppercase">123.456.789-00</div>
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-600">(11) 98888-7777</td>
+                            <td class="px-6 py-4 text-sm text-gray-600">Unimed Especial</td>
+                            <td class="px-6 py-4 text-center">
+                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full uppercase">Em Tratamento</span>
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <button class="text-blue-600 hover:underline font-bold text-xs">Prontuário</button>
+                                <button class="ml-3 text-slate-400 hover:text-slate-800 font-bold text-xs">Editar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-paciente" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-2 md:p-4">
+        <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
+            
+            <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                <div>
+                    <h3 class="text-lg font-bold text-slate-800">Ficha Cadastral do Paciente</h3>
+                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Identificação e Dados Clínicos</p>
+                </div>
+                <button onclick="togglePacienteModal(false)" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
+            </div>
+
+            <div class="flex flex-1 overflow-hidden">
+                <aside class="w-48 bg-slate-50 border-r border-gray-100 flex flex-col p-2 space-y-1 hidden md:flex">
+                    <button class="tab-btn active-tab text-left p-3 rounded-lg text-xs font-bold transition">1. Pessoais</button>
+                    <button class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">2. Endereço</button>
+                    <button class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">3. Clínico</button>
+                </aside>
+
+                <div class="flex-1 overflow-y-auto p-6 bg-white">
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">1. Informações Básicas</h4>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label class="label-clinica">Nome Completo *</label>
+                                <input type="text" class="input-clinica" placeholder="Nome do paciente">
+                            </div>
+                            <div>
+                                <label class="label-clinica">CPF *</label>
+                                <input type="text" id="pac-cpf" class="input-clinica" placeholder="000.000.000-00">
+                            </div>
+                            <div>
+                                <label class="label-clinica">Data de Nascimento *</label>
+                                <input type="date" class="input-clinica">
+                            </div>
+                            <div>
+                                <label class="label-clinica">Gênero</label>
+                                <select class="input-clinica">
+                                    <option>Masculino</option>
+                                    <option>Feminino</option>
+                                    <option>Outro</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="label-clinica">Celular/WhatsApp *</label>
+                                <input type="text" class="input-clinica" placeholder="(00) 00000-0000">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-4 border-t bg-slate-50 flex justify-end gap-3">
+                <button onclick="togglePacienteModal(false)" class="px-4 py-2 text-gray-500 font-bold text-sm">Descartar</button>
+                <button class="bg-blue-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Salvar Paciente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePacienteModal(show) {
+            const modal = document.getElementById('modal-paciente');
+            if (show) modal.classList.remove('hidden');
+            else modal.classList.add('hidden');
+        }
+
+        // Máscara básica para CPF
+        var cpfMask = IMask(document.getElementById('pac-cpf'), { mask: '000.000.000-00' });
+    </script>
+</body>
+</html>
