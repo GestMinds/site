@@ -10,18 +10,12 @@
     <script src="https://unpkg.com/imask"></script>
     <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
     <style>
-        .input-clinica { 
-            @apply w-full p-2 bg-white border border-slate-900 rounded text-sm outline-none transition-all;
-        }
-        .input-clinica:focus { 
-            @apply border-blue-600 ring-1 ring-blue-600;
-        }
-        .label-clinica { 
-            @apply block text-[10px] font-black text-slate-700 uppercase mb-1; 
-        }
-        .tab-btn.active-tab { 
-            @apply bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm; 
-        }
+        .input-clinica { @apply w-full p-2 bg-white border border-slate-900 rounded text-sm outline-none transition-all; }
+        .input-clinica:focus { @apply border-blue-600 ring-1 ring-blue-600; }
+        .label-clinica { @apply block text-[10px] font-black text-slate-700 uppercase mb-1; }
+        .tab-btn.active-tab { @apply bg-white text-blue-600 border-l-4 border-blue-600 shadow-sm; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
     </style>
 </head>
 
@@ -32,19 +26,24 @@
             Gest<span class="text-blue-500">Minds</span>
         </div>
         <nav class="flex-1 p-4 space-y-2 mt-4">
-             <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="index.html"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
             </a>
-            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="clientes.html"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Clientes
             </a>
-            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="fornecedores.html"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Fornecedores
             </a>
-            <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="estoque.html"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Estoque/Almoxarifado
             </a>
-            <a href="financeiro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+            <a href="financeiro.html"
+                class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Financeiro
             </a>
             <a href="pacientes.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">
@@ -53,10 +52,11 @@
             <a href="hc.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
                 Historico de Consultas
             </a>
-   
+
         </nav>
         <div class="p-4 border-t border-slate-800">
-            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+            <button onclick="Auth.logout()"
+                class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
         </div>
     </aside>
 
@@ -66,23 +66,20 @@
                 <h2 class="font-bold text-slate-800 text-lg">Gestão de Pacientes</h2>
                 <p class="text-xs text-gray-400">Cadastre e gerencie o histórico clínico</p>
             </div>
-            <div class="flex items-center gap-4">
-                <button onclick="togglePacienteModal(true)" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-700 transition shadow-sm">
-                    + Novo Paciente
-                </button>
-            </div>
+            <button onclick="togglePacienteModal(true)" class="bg-blue-600 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-blue-700 transition shadow-sm">
+                + Novo Paciente
+            </button>
         </header>
 
         <section class="flex-1 overflow-y-auto p-8">
             <div class="mb-6 flex gap-4">
-                <input type="text" placeholder="Buscar paciente por nome ou CPF..." class="flex-1 p-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-500 transition">
+                <input type="text" id="busca-paciente" placeholder="Buscar por nome ou CPF..." class="flex-1 p-3 rounded-xl border border-gray-200 text-sm outline-none focus:border-blue-500 transition">
                 <select class="p-3 rounded-xl border border-gray-200 text-sm outline-none">
                     <option>Todos os Status</option>
                     <option>Em Tratamento</option>
                     <option>Alta</option>
-                    <option>Aguardando</option>
                 </select>
-            </div>4
+            </div>
 
             <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
                 <table class="w-full text-left border-collapse">
@@ -96,21 +93,7 @@
                         </tr>
                     </thead>
                     <tbody id="lista-pacientes">
-                        <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
-                            <td class="px-6 py-4">
-                                <div class="font-bold text-slate-800">João Silva Oliveira</div>
-                                <div class="text-[10px] text-gray-400 uppercase">123.456.789-00</div>
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">(11) 98888-7777</td>
-                            <td class="px-6 py-4 text-sm text-gray-600">Unimed Especial</td>
-                            <td class="px-6 py-4 text-center">
-                                <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full uppercase">Em Tratamento</span>
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <button class="text-blue-600 hover:underline font-bold text-xs">Prontuário</button>
-                                <button class="ml-3 text-slate-400 hover:text-slate-800 font-bold text-xs">Editar</button>
-                            </td>
-                        </tr>
+                        <tr><td colspan="5" class="p-10 text-center text-gray-400">Carregando dados...</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -121,69 +104,194 @@
         <div class="bg-white w-full max-w-4xl max-h-[90vh] rounded-2xl shadow-2xl flex flex-col overflow-hidden">
             
             <div class="p-4 border-b bg-slate-50 flex justify-between items-center">
-                <div>
-                    <h3 class="text-lg font-bold text-slate-800">Ficha Cadastral do Paciente</h3>
-                    <p class="text-[10px] text-gray-500 uppercase tracking-widest font-bold">Identificação e Dados Clínicos</p>
-                </div>
+                <h3 class="text-lg font-bold text-slate-800">Ficha Cadastral do Paciente</h3>
                 <button onclick="togglePacienteModal(false)" class="text-gray-400 hover:text-red-500 text-2xl">&times;</button>
             </div>
 
             <div class="flex flex-1 overflow-hidden">
                 <aside class="w-48 bg-slate-50 border-r border-gray-100 flex flex-col p-2 space-y-1 hidden md:flex">
-                    <button class="tab-btn active-tab text-left p-3 rounded-lg text-xs font-bold transition">1. Pessoais</button>
-                    <button class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">2. Endereço</button>
-                    <button class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400 transition">3. Clínico</button>
+                    <button onclick="switchTab(1)" class="tab-btn active-tab text-left p-3 rounded-lg text-xs font-bold">1. Pessoais</button>
+                    <button onclick="switchTab(2)" class="tab-btn text-left p-3 rounded-lg text-xs font-bold text-gray-400">2. Clínico</button>
                 </aside>
 
                 <div class="flex-1 overflow-y-auto p-6 bg-white">
-                    <div class="space-y-4">
-                        <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">1. Informações Básicas</h4>
+                    <div id="tab-1" class="tab-content active space-y-4">
+                        <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">Informações Básicas</h4>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="md:col-span-2">
                                 <label class="label-clinica">Nome Completo *</label>
-                                <input type="text" class="input-clinica" placeholder="Nome do paciente">
+                                <input type="text" id="pac-nome" class="input-clinica" placeholder="Nome do paciente">
                             </div>
                             <div>
                                 <label class="label-clinica">CPF *</label>
                                 <input type="text" id="pac-cpf" class="input-clinica" placeholder="000.000.000-00">
                             </div>
                             <div>
-                                <label class="label-clinica">Data de Nascimento *</label>
-                                <input type="date" class="input-clinica">
-                            </div>
-                            <div>
-                                <label class="label-clinica">Gênero</label>
-                                <select class="input-clinica">
-                                    <option>Masculino</option>
-                                    <option>Feminino</option>
-                                    <option>Outro</option>
-                                </select>
+                                <label class="label-clinica">Data de Nascimento</label>
+                                <input type="date" id="pac-nasc" class="input-clinica">
                             </div>
                             <div>
                                 <label class="label-clinica">Celular/WhatsApp *</label>
-                                <input type="text" class="input-clinica" placeholder="(00) 00000-0000">
+                                <input type="text" id="pac-tel" class="input-clinica" placeholder="(00) 00000-0000">
                             </div>
+                            <div>
+                                <label class="label-clinica">Gênero</label>
+                                <select id="pac-gen" class="input-clinica">
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="tab-2" class="tab-content space-y-4">
+                        <h4 class="font-bold text-slate-800 border-b-2 border-slate-900 pb-2">Dados Clínicos</h4>
+                        <div>
+                            <label class="label-clinica">Convênio / Plano</label>
+                            <input type="text" id="pac-convenio" class="input-clinica" placeholder="Ex: Particular, Unimed...">
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="p-4 border-t bg-slate-50 flex justify-end gap-3">
-                <button onclick="togglePacienteModal(false)" class="px-4 py-2 text-gray-500 font-bold text-sm">Descartar</button>
-                <button class="bg-blue-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Salvar Paciente</button>
+                <button onclick="togglePacienteModal(false)" class="px-4 py-2 text-gray-500 font-bold text-sm">Cancelar</button>
+                <button onclick="salvarPaciente()" class="bg-blue-600 text-white px-8 py-2 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">Salvar Paciente</button>
             </div>
         </div>
     </div>
 
     <script>
+        // 1. Configuração Supabase
+        // Certifique-se de substituir pelas suas chaves reais
+        const supabaseUrl = 'https://dduistcgwxuiciyqeidd.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        // 2. Funções de Interface (UI)
         function togglePacienteModal(show) {
             const modal = document.getElementById('modal-paciente');
             if (show) modal.classList.remove('hidden');
             else modal.classList.add('hidden');
         }
 
-        // Máscara básica para CPF
-        var cpfMask = IMask(document.getElementById('pac-cpf'), { mask: '000.000.000-00' });
+        function switchTab(tabIndex) {
+            // Alterna o conteúdo das abas
+            document.querySelectorAll('.tab-content').forEach((el, i) => {
+                el.classList.toggle('active', i + 1 === tabIndex);
+            });
+            // Alterna o estilo dos botões
+            document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+                btn.classList.toggle('active-tab', i + 1 === tabIndex);
+            });
+        }
+
+        // 3. Funções de Dados (Backend/Supabase)
+        async function carregarPacientes(termo = '') {
+            const corpo = document.getElementById('lista-pacientes');
+            let query = _supabase.from('pacientes').select('*');
+            
+            if (termo) {
+                query = query.or(`nome.ilike.%${termo}%,cpf.ilike.%${termo}%`);
+            }
+
+            const { data, error } = await query.order('nome');
+
+            if (error) {
+                console.error('Erro ao buscar pacientes:', error);
+                return;
+            }
+            
+            corpo.innerHTML = data.length ? '' : '<tr><td colspan="5" class="p-10 text-center text-gray-400">Nenhum paciente encontrado.</td></tr>';
+            
+            data.forEach(p => {
+                corpo.innerHTML += `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-slate-800">${p.nome}</div>
+                            <div class="text-[10px] text-gray-400 uppercase">${p.cpf}</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${p.telefone || '---'}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${p.convenio || 'Particular'}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full uppercase">${p.status}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="text-blue-600 hover:underline font-bold text-xs">Prontuário</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        async function salvarPaciente() {
+            // Captura o valor da data
+            const dataNascValue = document.getElementById('pac-nasc').value;
+
+            const dados = {
+                nome: document.getElementById('pac-nome').value,
+                cpf: document.getElementById('pac-cpf').value,
+                // Se a data estiver vazia, enviamos null, caso contrário enviamos a data
+                data_nascimento: dataNascValue === "" ? null : dataNascValue, 
+                telefone: document.getElementById('pac-tel').value,
+                genero: document.getElementById('pac-gen').value,
+                convenio: document.getElementById('pac-convenio').value,
+                status: 'Em Tratamento'
+            };
+
+            if (!dados.nome || !dados.cpf) {
+                alert("Por favor, preencha o Nome e o CPF.");
+                return;
+            }
+
+            const { error } = await _supabase.from('pacientes').insert([dados]);
+            
+            if (error) {
+                alert("Erro ao salvar no banco: " + error.message);
+            } else {
+                alert("Paciente cadastrado com sucesso!");
+                togglePacienteModal(false);
+                
+                // Limpa TODOS os campos após salvar
+                document.getElementById('pac-nome').value = '';
+                document.getElementById('pac-cpf').value = '';
+                document.getElementById('pac-nasc').value = '';
+                document.getElementById('pac-tel').value = '';
+                document.getElementById('pac-convenio').value = '';
+                
+                carregarPacientes();
+            }
+        }
+
+        // 4. Inicialização Única (Quando a página carrega)
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Inicializa Máscara de CPF
+            const elementCpf = document.getElementById('pac-cpf');
+            if (elementCpf) {
+                IMask(elementCpf, { mask: '000.000.000-00' });
+            }
+
+            // Inicializa Máscara de Telefone Dinâmica
+            const elementTel = document.getElementById('pac-tel');
+            if (elementTel) {
+                IMask(elementTel, {
+                    mask: [
+                        { mask: '(00) 0000-0000' },
+                        { mask: '(00) 00000-0000' }
+                    ]
+                });
+            }
+
+            // Configura o Filtro de Busca
+            const buscaInput = document.getElementById('busca-paciente');
+            if (buscaInput) {
+                buscaInput.addEventListener('input', (e) => carregarPacientes(e.target.value));
+            }
+
+            // Carrega os dados iniciais
+            carregarPacientes();
+        });
     </script>
 </body>
 </html>

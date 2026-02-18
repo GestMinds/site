@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GestMinds | Histórico de Consultas</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="assets/js/auth.js"></script>
+    <script>if (!Auth.isAuthenticated()) { window.location.href = 'login.html'; }</script>
+    <style>
+        .status-badge { @apply px-3 py-1 rounded-full text-[10px] font-bold uppercase; }
+        .input-search { @apply p-2 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-500 transition-all; }
+    </style>
+</head>
+
+<body class="bg-gray-50 h-screen flex overflow-hidden">
+
+    <aside class="w-64 bg-slate-900 text-white flex flex-col hidden md:flex shrink-0">
+        <div class="p-6 text-2xl font-bold border-b border-slate-800 tracking-tight">
+            Gest<span class="text-blue-500">Minds</span>
+        </div>
+        <nav class="flex-1 p-4 space-y-2 mt-4">
+            <a href="index.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">
+                <span class="w-2 h-2 rounded-full bg-white"></span> Dashboard
+            </a>
+            <a href="clientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">Clientes</a>
+            <a href="fornecedores.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">Fornecedores</a>
+            <a href="estoque.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">Estoque/Almoxarifado</a>
+            <a href="financeiro.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">Financeiro</a>
+            <a href="pacientes.html" class="flex items-center gap-3 p-3 rounded-lg hover:bg-slate-800 text-gray-400 hover:text-white transition">Gestão de Pacientes</a>
+            <a href="hc.html" class="flex items-center gap-3 p-3 rounded-lg bg-blue-600 text-white shadow-lg">Historico de Consultas</a>
+        </nav>
+        <div class="p-4 border-t border-slate-800">
+            <button onclick="Auth.logout()" class="w-full text-center p-3 text-sm text-gray-400 hover:text-red-400 transition">Sair</button>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-8">
+            <div>
+                <h2 class="font-bold text-slate-800 text-lg">Histórico de Consultas</h2>
+                <p class="text-xs text-gray-400">Registro cronológico de atendimentos</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <input type="date" id="filtro-data" class="input-search">
+                <button onclick="carregarConsultas()" class="bg-slate-900 text-white px-4 py-2 rounded-xl font-bold text-sm hover:bg-black transition">Filtrar</button>
+            </div>
+        </header>
+
+        <section class="flex-1 overflow-y-auto p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Total Geral</p>
+                    <h3 id="card-total" class="text-2xl font-black text-slate-800">0</h3>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Concluídas</p>
+                    <h3 id="card-concluidas" class="text-2xl font-black text-blue-600">0</h3>
+                </div>
+                <div class="bg-white p-5 rounded-2xl border border-gray-200 shadow-sm">
+                    <p class="text-xs font-bold text-gray-400 uppercase">Canceladas/Faltas</p>
+                    <h3 id="card-faltas" class="text-2xl font-black text-red-500">0</h3>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-gray-200 shadow-sm overflow-hidden">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-gray-50/50 border-b border-gray-200">
+                        <tr>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Data / Hora</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Paciente</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Tipo</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase">Profissional</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-center">Status</th>
+                            <th class="px-6 py-4 text-xs font-bold text-gray-400 uppercase text-right">Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lista-consultas">
+                        <tr><td colspan="6" class="p-10 text-center text-gray-400">Carregando consultas...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const supabaseUrl = 'https://dduistcgwxuiciyqeidd.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRkdWlzdGNnd3h1aWNpeXFlaWRkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njg2MTc3MzYsImV4cCI6MjA4NDE5MzczNn0.is6SOIkl-nbhsDTy4W7sUoHrQGSTZdyFL_dlAOhnG8g';
+        const _supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function carregarConsultas() {
+            const corpo = document.getElementById('lista-consultas');
+            const dataFiltro = document.getElementById('filtro-data').value;
+
+            // Buscamos as consultas. O segredo é garantir que a tabela 'pacientes' seja buscada
+            let query = _supabase
+                .from('consultas')
+                .select('*, pacientes(nome)') 
+                .order('data_consulta', { ascending: false });
+
+            if (dataFiltro) {
+                query = query.gte('data_consulta', `${dataFiltro}T00:00:00`)
+                             .lte('data_consulta', `${dataFiltro}T23:59:59`);
+            }
+
+            const { data, error } = await query;
+
+            if (error) {
+                console.error('Erro na query:', error);
+                corpo.innerHTML = `<tr><td colspan="6" class="p-10 text-center text-red-500">Erro ao carregar: ${error.message}</td></tr>`;
+                return;
+            }
+
+            // DEBUG: Isso mostrará no console do seu navegador (F12) como os dados estão chegando
+            console.log("Dados recebidos do banco:", data);
+
+            document.getElementById('card-total').innerText = data.length;
+            document.getElementById('card-concluidas').innerText = data.filter(c => c.status === 'Concluída').length;
+            document.getElementById('card-faltas').innerText = data.filter(c => c.status === 'Faltou' || c.status === 'Cancelada').length;
+
+            corpo.innerHTML = data.length ? '' : '<tr><td colspan="6" class="p-10 text-center text-gray-400">Nenhuma consulta encontrada.</td></tr>';
+
+            data.forEach(c => {
+                const dataObj = new Date(c.data_consulta);
+                const dataFormatada = dataObj.toLocaleDateString('pt-BR');
+                const horaFormatada = dataObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+                // Lógica de "Segurança" para o nome do paciente:
+                // Tenta buscar em 'pacientes' (plural) ou 'paciente' (singular)
+                const nomePaciente = c.pacientes?.nome || c.paciente?.nome || 'Paciente não vinculado';
+
+                let statusClass = 'bg-gray-50 text-gray-600';
+                if (c.status === 'Concluída') statusClass = 'bg-emerald-50 text-emerald-600';
+                if (c.status === 'Faltou') statusClass = 'bg-red-50 text-red-600';
+                if (c.status === 'Agendado') statusClass = 'bg-blue-50 text-blue-600';
+
+                corpo.innerHTML += `
+                    <tr class="border-b border-gray-100 hover:bg-gray-50 transition">
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-slate-800">${dataFormatada}</div>
+                            <div class="text-[10px] text-blue-600 font-bold">${horaFormatada}h</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <div class="font-bold text-slate-800">${nomePaciente}</div>
+                            <div class="text-[10px] text-gray-400 uppercase">${c.categoria || 'Consulta'}</div>
+                        </td>
+                        <td class="px-6 py-4">
+                            <span class="text-xs text-gray-600 flex items-center gap-1">
+                                <span class="w-2 h-2 rounded-full ${c.tipo_atendimento === 'Online' ? 'bg-blue-500' : 'bg-emerald-500'}"></span> 
+                                ${c.tipo_atendimento || 'Presencial'}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${c.profissional_nome || 'Não definido'}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="status-badge ${statusClass}">${c.status}</span>
+                        </td>
+                        <td class="px-6 py-4 text-right">
+                            <button class="bg-slate-100 hover:bg-slate-200 p-2 rounded-lg transition">📄</button>
+                        </td>
+                    </tr>`;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', carregarConsultas);
+    </script>
+</body>
+</html>
