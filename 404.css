@@ -1,0 +1,234 @@
+:root {
+    --bg: #0b0f17;
+    --surface: #111827;
+    --border: #263142;
+    --border-light: #344052;
+    --text: #f3f5f8;
+    --text-secondary: #a7b0bf;
+    --text-muted: #737e8f;
+    --accent: #6875e8;
+    --accent-hover: #7884ef;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "DM Sans", sans-serif;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.018) 1px, transparent 1px);
+    background-size: 55px 55px;
+    mask-image: linear-gradient(to bottom, black, transparent 80%);
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.error-page {
+    min-height: 100vh;
+    width: min(100% - 40px, 1180px);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.error-header {
+    height: 86px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+}
+
+.logo {
+    font-family: "Manrope", sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.045em;
+}
+
+.logo span {
+    color: #8792ed;
+}
+
+.error-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0;
+}
+
+.error-code {
+    font-family: "Manrope", sans-serif;
+    font-size: clamp(110px, 20vw, 220px);
+    line-height: 0.8;
+    font-weight: 800;
+    letter-spacing: -0.09em;
+    color: #151d2b;
+    user-select: none;
+}
+
+.error-line {
+    width: 48px;
+    height: 2px;
+    margin: 42px 0 24px;
+    background: var(--accent);
+}
+
+.error-label {
+    margin-bottom: 15px;
+    color: #8994ed;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.17em;
+}
+
+h1 {
+    max-width: 720px;
+    font-family: "Manrope", sans-serif;
+    font-size: clamp(34px, 6vw, 64px);
+    line-height: 1.06;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+}
+
+.error-description {
+    max-width: 570px;
+    margin-top: 22px;
+    color: var(--text-secondary);
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+.error-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    margin-top: 34px;
+}
+
+.btn {
+    min-height: 50px;
+    padding: 0 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    transition: 220ms ease;
+}
+
+.btn svg {
+    width: 17px;
+    height: 17px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--accent-hover);
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    border-color: var(--border-light);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: #172030;
+    border-color: #465268;
+    transform: translateY(-2px);
+}
+
+.error-footer {
+    min-height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-top: 1px solid var(--border);
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.error-footer a {
+    color: #8792ed;
+    transition: 220ms ease;
+}
+
+.error-footer a:hover {
+    color: var(--text);
+}
+
+@media (min-width: 640px) {
+    .error-page {
+        width: min(100% - 60px, 1180px);
+    }
+
+    .error-actions {
+        flex-direction: row;
+    }
+}
+
+@media (max-width: 639px) {
+    .error-page {
+        width: min(100% - 30px, 1180px);
+    }
+
+    .error-header {
+        height: 72px;
+    }
+
+    .error-content {
+        padding: 60px 0;
+    }
+
+    .error-code {
+        font-size: 110px;
+    }
+
+    .error-line {
+        margin-top: 35px;
+    }
+
+    .error-footer {
+        padding: 20px 0;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
