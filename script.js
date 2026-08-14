@@ -505,3 +505,39 @@ document.addEventListener("keydown", (event) => {
 });
 
 startChat();
+
+const themeToggle = document.getElementById("themeToggle");
+
+const savedTheme = localStorage.getItem("gestminds-theme");
+
+if (savedTheme === "light" || savedTheme === "dark") {
+    document.documentElement.setAttribute("data-theme", savedTheme);
+}
+
+if (themeToggle) {
+    const updateThemeButton = () => {
+        const isLight =
+            document.documentElement.getAttribute("data-theme") === "light";
+
+        themeToggle.setAttribute(
+            "aria-label",
+            isLight ? "Ativar modo escuro" : "Ativar modo claro"
+        );
+    };
+
+    themeToggle.addEventListener("click", () => {
+        const currentTheme =
+            document.documentElement.getAttribute("data-theme");
+
+        const newTheme =
+            currentTheme === "light" ? "dark" : "light";
+
+        document.documentElement.setAttribute("data-theme", newTheme);
+
+        localStorage.setItem("gestminds-theme", newTheme);
+
+        updateThemeButton();
+    });
+
+    updateThemeButton();
+}
