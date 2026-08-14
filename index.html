@@ -53,11 +53,6 @@
       <div class="container">
         <div class="hero-content">
 
-          <div class="hero-label">
-            <span></span>
-            Tecnologia aplicada a negócios
-          </div>
-
           <h1 class="hero-title">
             Tecnologia para transformar
             <strong>operação em crescimento.</strong>
@@ -545,17 +540,14 @@
             soluções fazem sentido para o momento da sua empresa.
           </p>
 
-          <a
-              class="btn btn-primary"
-              href="https://wa.me/5587981454634?text=Ol%C3%A1%2C%20tudo%20bem%3F%20Conheci%20a%20GestMinds%20e%20gostaria%20de%20agendar%20uma%20reuni%C3%A3o%20sem%20compromisso%20com%20um%20dos%20especialistas."
-              target="_blank"
-              rel="noopener"
-          >
-              Falar com um Especialista
-              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
-                  <path d="M5 12h14"></path>
-                  <path d="m13 6 6 6-6 6"></path>
-              </svg>
+          <a class="btn btn-primary"
+            href="https://wa.me/5587981454634?text=Ol%C3%A1%2C%20tudo%20bem%3F%20Conheci%20a%20GestMinds%20e%20gostaria%20de%20agendar%20uma%20reuni%C3%A3o%20sem%20compromisso%20com%20um%20dos%20especialistas."
+            target="_blank" rel="noopener">
+            Falar com um Especialista
+            <svg viewBox="0 0 24 24" fill="none" stroke-width="1.8">
+              <path d="M5 12h14"></path>
+              <path d="m13 6 6 6-6 6"></path>
+            </svg>
           </a>
 
         </div>
@@ -614,8 +606,8 @@
               </svg>
 
               <a href="https://wa.me/5587981454634" target="_blank" rel="noopener">
-                  Fale com um de nossos especialistas<br>
-                  (87) 98145-4634
+                Fale com um de nossos especialistas<br>
+                (87) 98145-4634
               </a>
             </div>
 
@@ -647,14 +639,234 @@
         <span>© 2026 GestMinds. Todos os direitos reservados.</span>
 
         <div class="footer-bottom-links">
-          <a href="#">Privacidade</a>
-          <a href="#">Termos de Uso</a>
+          <a href="#privacidade" data-modal="privacidade">Privacidade</a>
+          <a href="#termos" data-modal="termos">Termos de Uso</a>
         </div>
       </div>
 
     </div>
   </footer>
 
+
+  <!-- Daqui pra baixo é so os bglh de chatbot e politicas de privacidade e uso-->
+  <!--chatbot-->
+
+  <div class="chatbot" id="gestmindsAssist">
+
+    <button class="chatbot-toggle" type="button" aria-label="Abrir GestMinds Assist">
+      <svg class="chatbot-icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path
+          d="M20 11.5a7.5 7.5 0 0 1-7.5 7.5 8.2 8.2 0 0 1-3.6-.82L4 20l1.82-4.9A7.4 7.4 0 0 1 5 11.5 7.5 7.5 0 0 1 12.5 4 7.5 7.5 0 0 1 20 11.5Z">
+        </path>
+        <path d="M9 11.5h.01"></path>
+        <path d="M12.5 11.5h.01"></path>
+        <path d="M16 11.5h.01"></path>
+      </svg>
+
+      <svg class="chatbot-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+        <path d="M18 6 6 18"></path>
+        <path d="m6 6 12 12"></path>
+      </svg>
+    </button>
+
+    <div class="chatbot-window" aria-hidden="true">
+
+      <header class="chatbot-header">
+
+        <div class="chatbot-brand">
+          <div class="chatbot-avatar">
+            GM
+          </div>
+
+          <div>
+            <strong>GestMinds Assist</strong>
+
+            <span>
+              <i></i>
+              Consultor digital
+            </span>
+          </div>
+        </div>
+
+        <button class="chatbot-header-close" type="button" aria-label="Fechar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M18 6 6 18"></path>
+            <path d="m6 6 12 12"></path>
+          </svg>
+        </button>
+
+      </header>
+
+      <div class="chatbot-progress">
+
+        <div class="progress-header">
+          <span>Análise da empresa</span>
+          <strong id="chatProgressText">1 de 5</strong>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-bar" id="chatProgressBar"></div>
+        </div>
+
+      </div>
+
+      <main class="chatbot-messages" id="chatMessages"></main>
+
+      <form class="chatbot-input-area" id="chatForm">
+
+        <input type="text" id="chatInput" class="chatbot-input" placeholder="Digite sua resposta..." autocomplete="off"
+          maxlength="500">
+
+        <button type="submit" class="chatbot-send" aria-label="Enviar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="m22 2-7 20-4-9-9-4Z"></path>
+            <path d="M22 2 11 13"></path>
+          </svg>
+        </button>
+
+      </form>
+
+      <div class="chatbot-footer">
+        GestMinds Assist
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- politicas-->
+
+  <div class="modal" id="privacidade" aria-hidden="true">
+    <div class="modal-overlay" data-close-modal></div>
+
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="privacidade-title">
+      <button class="modal-close" type="button" aria-label="Fechar" data-close-modal>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+
+      <span class="modal-label">GESTMINDS</span>
+
+      <h2 id="privacidade-title">Política de Privacidade</h2>
+
+      <p>
+        A GestMinds valoriza a privacidade e a segurança das informações
+        fornecidas por seus clientes e visitantes.
+      </p>
+
+      <h3>1. Coleta de informações</h3>
+
+      <p>
+        Podemos coletar informações fornecidas voluntariamente pelo usuário
+        através de formulários, canais de contato e solicitações de atendimento.
+      </p>
+
+      <h3>2. Uso das informações</h3>
+
+      <p>
+        As informações coletadas podem ser utilizadas para atendimento,
+        comunicação comercial, prestação de serviços e melhoria da experiência
+        oferecida pela GestMinds.
+      </p>
+
+      <h3>3. Segurança</h3>
+
+      <p>
+        Adotamos medidas técnicas e organizacionais razoáveis para proteger
+        as informações contra acesso, alteração, divulgação ou destruição
+        não autorizada.
+      </p>
+
+      <h3>4. Compartilhamento</h3>
+
+      <p>
+        Não comercializamos dados pessoais. Informações poderão ser
+        compartilhadas quando necessário para execução dos serviços,
+        cumprimento de obrigações legais ou proteção dos direitos da empresa.
+      </p>
+
+      <h3>5. Contato</h3>
+
+      <p>
+        Para dúvidas relacionadas à privacidade e ao tratamento de dados,
+        entre em contato com a equipe da GestMinds.
+      </p>
+
+      <p class="modal-updated">
+        Última atualização: agosto de 2026.
+      </p>
+    </div>
+  </div>
+
+  <div class="modal" id="termos" aria-hidden="true">
+    <div class="modal-overlay" data-close-modal></div>
+
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="termos-title">
+      <button class="modal-close" type="button" aria-label="Fechar" data-close-modal>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M18 6 6 18"></path>
+          <path d="m6 6 12 12"></path>
+        </svg>
+      </button>
+
+      <span class="modal-label">GESTMINDS</span>
+
+      <h2 id="termos-title">Termos de Uso</h2>
+
+      <p>
+        Ao utilizar o site e os canais digitais da GestMinds, o usuário
+        concorda com os presentes termos.
+      </p>
+
+      <h3>1. Uso do site</h3>
+
+      <p>
+        O conteúdo disponibilizado neste site possui finalidade informativa
+        e institucional. As informações apresentadas podem ser alteradas
+        sem aviso prévio.
+      </p>
+
+      <h3>2. Serviços</h3>
+
+      <p>
+        A apresentação de serviços, soluções e combos não representa,
+        por si só, uma contratação. Cada projeto poderá possuir condições,
+        escopo, valores e prazos definidos individualmente.
+      </p>
+
+      <h3>3. Propriedade intelectual</h3>
+
+      <p>
+        Textos, identidade visual, elementos gráficos, código e demais
+        materiais desenvolvidos pela GestMinds são protegidos pela legislação
+        aplicável e não devem ser reproduzidos sem autorização.
+      </p>
+
+      <h3>4. Links externos</h3>
+
+      <p>
+        O site pode apresentar links para serviços e plataformas de terceiros.
+        A GestMinds não se responsabiliza pelas políticas, conteúdos ou
+        práticas desses serviços externos.
+      </p>
+
+      <h3>5. Alterações</h3>
+
+      <p>
+        Estes termos podem ser atualizados periodicamente para refletir
+        alterações nos serviços, na legislação ou na operação da empresa.
+      </p>
+
+      <p class="modal-updated">
+        Última atualização: agosto de 2026.
+      </p>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 
 </html>
