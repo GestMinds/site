@@ -713,7 +713,7 @@
       <main class="chatbot-messages" id="chatMessages"></main>
 
       <form class="chatbot-input-area" id="chatForm">
-        
+
       </form>
 
       <div class="chatbot-footer">
@@ -857,6 +857,91 @@
   </div>
 
   <script src="script.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const modalTriggers = document.querySelectorAll("[data-modal]");
+      const modals = document.querySelectorAll(".modal");
+      const closeButtons = document.querySelectorAll("[data-close-modal]");
+
+      const openModal = (modal) => {
+        if (!modal) return;
+
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("modal-open");
+
+        const closeButton = modal.querySelector(".modal-close");
+
+        if (closeButton) {
+          closeButton.focus();
+        }
+      };
+
+      const closeModal = (modal) => {
+        if (!modal) return;
+
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("modal-open");
+      };
+
+      modalTriggers.forEach((trigger) => {
+        trigger.addEventListener("click", (event) => {
+          event.preventDefault();
+
+          const modalId = trigger.dataset.modal;
+          const modal = document.getElementById(modalId);
+
+          openModal(modal);
+        });
+      });
+
+      closeButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          const modal = button.closest(".modal");
+
+          closeModal(modal);
+        });
+      });
+
+      modals.forEach((modal) => {
+        modal.addEventListener("click", (event) => {
+          if (event.target === modal) {
+            closeModal(modal);
+          }
+        });
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key !== "Escape") return;
+
+        const activeModal = document.querySelector(".modal.active");
+
+        if (activeModal) {
+          closeModal(activeModal);
+        }
+      });
+
+      document.querySelectorAll('a[href^="#"]').forEach((link) => {
+        link.addEventListener("click", (event) => {
+          const targetId = link.getAttribute("href");
+
+          if (!targetId || targetId === "#") return;
+
+          const target = document.querySelector(targetId);
+
+          if (!target) return;
+
+          event.preventDefault();
+
+          target.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+          });
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>
